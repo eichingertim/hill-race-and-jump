@@ -24,7 +24,7 @@ const images = loadImages(imageFiles, setup);
 
 function updateGameArea() {
     canvas.getContext("2d").clearRect(0,0, 1080, 720);
-    car.update();
+    car.update(ground.height);
     car.draw();
     ground.draw();
 }
