@@ -10,8 +10,8 @@ class Wheel extends BaseImageElement {
         this.y = y;
     }
 
-    draw() {
-        this.ctx.drawImage(this.image, this.x, this.y, this.image.width - 25, this.image.height - 25);
+    draw(ctx) {
+        ctx.drawImage(this.image, 0, this.y, this.image.width - 25, this.image.height - 25);
     }
 }
 

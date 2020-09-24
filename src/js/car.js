@@ -1,10 +1,6 @@
 import Body from "./body.js";
 import Wheel from "./wheel.js";
 
-let instance;
-
-const MAX_SPEED_X = 4;
-
 class Car {
     constructor(x, y, canvas, imgBody, imgWheel) {
         this.canvas = canvas;
@@ -19,61 +15,50 @@ class Car {
         this.body = new Body(x, y, canvas, imgBody);
         this.wheelFront = new Wheel(x + 136, y + 85, canvas, imgWheel);
         this.wheelBack = new Wheel( x + 13, y + 85, canvas, imgWheel);
-        this.isKeyDown = false;
-        instance = this;
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowRight') {  
-                instance.isKeyDown = true;
-                if (instance.speedX + 0.5 > MAX_SPEED_X) {
-                    instance.speedX = MAX_SPEED_X;
-                } else {
-                    instance.speedX += 0.5
-                }
-            } else if (event.key === 'ArrowLeft') {
-                instance.isKeyDown = true;
-                if (instance.speedX - 0.5 < (-MAX_SPEED_X)) {
-                    instance.speedX = -MAX_SPEED_X;
-                } else {
-                    instance.speedX -= 0.5
-                }
+        this.accelerate = false;
+        this.decelerate = false;
+        document.addEventListener('keydown', event => {
+            if(event.repeat) {
+                return;
+            }
+            switch(event.key) {
+                case 'ArrowRight':
+                    this.accelerate = true;
+                    break;
+                case 'ArrowLeft':
+                    this.decelerate = true;
+                    break;
             }
         });
 
-        document.addEventListener('keyup', function(event) {
-            if (event.key === 'ArrowRight') { 
-                instance.isKeyDown = false;
-            } else if (event.key === 'ArrowLeft') {
-                instance.isKeyDown = false;
+        document.addEventListener('keyup', event => {
+            if(event.repeat) {
+                return;
+            }
+            switch(event.key) {
+                case 'ArrowRight':
+                    this.accelerate = false;
+                    break;
+                case 'ArrowLeft':
+                    this.decelerate = false;
+                    break;
             }
         });
     }
 
     update(groundY) {
-        if (!this.isKeyDown) {
-            
-            console.log(instance.speedX);
-            if (instance.speedX < 0) {
-                if (instance.speedX + 0.1 > 0) {
-                    instance.speedX = 0;
-                } else {
-                    instance.speedX += 0.1;
-                }
-            } else {
-                if (instance.speedX - 0.1 < 0) {
-                    instance.speedX = 0;
-                } else {
-                    instance.speedX -= 0.1;
-                }
-            }
-        }
-        this.gravitySpeed += this.gravity;
+        //sconsole.log(groundY);
+        this.speedX += this.accelerate * Car.ACCELERATION_RATE + this.decelerate * -Car.ACCELERATION_RATE;
+        this.speedX = Car.clamp(this.speedX, -Car.MAX_SPEED_X, Car.MAX_SPEED_X);
+       //this.gravitySpeed += this.gravity;
         this.x += this.speedX;
-        this.y += this.speedY + this.gravitySpeed;
-        this.hitBottom(groundY);
-        this.body.update(this.x, this.y);
-        this.wheelFront.update(this.x + 136, this.y + 85);
-        this.wheelBack.update(this.x + 13, this.y + 85);
+        this.x = Car.clamp(this.x, 0, 20 * this.canvas.width);
+        //this.y += this.speedY + this.gravitySpeed;
+        //this.hitBottom(groundY);
+        this.y = groundY;
+        //this.body.update(this.x, this.y);
+        //this.wheelFront.update(this.x + 136, this.y + 85);
+        this.wheelBack.update(this.x, this.y);
 
         if (this.isKeyDown) {
             return true;
@@ -84,22 +69,23 @@ class Car {
         return (this.wheelBack.y + this.wheelBack.height) - this.body.y - 30;
     }
 
-    hitBottom(groundY) {
-        groundY *= 30
-            console.log("groundY: " + groundY);
-            if ((this.y + this.height + 150) > groundY) {
-                this.y = groundY - this.height;
-            }
+    draw(ctx, panX) {
+        //this.wheelFront.draw();
+        this.wheelBack.draw(ctx);
+        //this.body.draw();
+        return this.x;
     }
 
-    draw(panX) {
-        this.canvas.getContext("2d").save();
-        this.canvas.getContext("2d").translate(this.x * 30 - panX, 0);
-        this.wheelFront.draw();
-        this.wheelBack.draw();
-        this.body.draw();
-        this.canvas.getContext("2d").restore();
-        return this.x - this.startingPosX;
+    static clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    static get MAX_SPEED_X() {
+        return 4;
+    }
+
+    static get ACCELERATION_RATE() {
+        return 0.2;
     }
 }
 
