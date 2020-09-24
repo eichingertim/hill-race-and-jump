@@ -2,10 +2,13 @@ import Ground from "./ground.js"
 import Car from "./car.js";
 
 let canvas,
+    ctx,
     ground,
     car;
 
 let imageFiles = ["body", "wheel"];
+const images = loadImages(imageFiles, setup);
+let panX = 0;
 
 function loadImages(files, onAllLoaded) {
     let i, numLoading = files.length;
@@ -19,24 +22,22 @@ function loadImages(files, onAllLoaded) {
     return images;
 }
 
-
-const images = loadImages(imageFiles, setup);
-
 function updateGameArea() {
-    canvas.getContext("2d").clearRect(0,0, 1080, 720);
-    car.update(ground.height);
-    car.draw();
-    ground.draw();
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+
+    ground.draw(ctx, panX);
+    car.update(ground);
+    panX = car.draw(ctx);
+    requestAnimationFrame(updateGameArea)
 }
 
 function setup() {
     canvas = document.querySelector("#canvas");
-
+    ctx = canvas.getContext("2d");
     ground = new Ground(canvas);
-    ground.draw();
 
-    car = new Car(70, 100, canvas, images.body, images.wheel);
+    car = new Car(canvas.width/2, 100, canvas, images.body, images.wheel);
 
-    setInterval(updateGameArea, 20);
+    requestAnimationFrame(updateGameArea);
 }
 

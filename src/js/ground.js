@@ -1,17 +1,62 @@
+import Vec2D from "./Vec2D.js";
+import Noise from "./Noise.js";
+import Map from"./Map.js"
+
+const SCALE = 30;
+
 class Ground {
     constructor(canvas) {
-        this.context = canvas.getContext("2d");
+        this.canvas = canvas;
+        this.height = canvas.height;
 
-        let { width, height } = canvas.getBoundingClientRect();
-        
-        this.width = width;
-        this.height = 50;
+        this.vectors = [];
+        this.distance = 20 * canvas.width;
+        this.grassThickness = 10;
+        this.smoothness = 10;
         this.x = 0
-        this.y = height - this.height;
+        this.y = 0;
+
+        for (let i = 0; i < this.distance; i+= this.smoothness) {
+            this.vectors.push(new Vec2D(i, canvas.height - Map.map(Noise.noise(i / 500), 0, 1, 10, 500)))
+        }
+
+        this.vectors.push(new Vec2D(this.distance, canvas.height + this.grassThickness * 2));
+        this.vectors.push(new Vec2D(0, canvas.height + this.grassThickness * 2));
+        console.log(this.vectors);
+        for (let vect of this.vectors) {
+            //vect.x /= SCALE;
+            //vect.y /= SCALE;
+        }
     }
 
-    draw() {
-        this.context.fillRect(this.x, this.y, this.width, this.height);
+    getY(x) {
+        let betweenSteps = x % this.smoothness,
+            current = (x - betweenSteps) / this.smoothness,
+            next = current + 1,
+            interpolation = 0;
+
+        if(betweenSteps !== 0) {
+            interpolation = (betweenSteps / this.smoothness) * (this.vectors[next].y - this.vectors[current].y);
+        }
+        return this.vectors[current].y + interpolation;
+    }
+
+    draw(ctx, panX) {
+        ctx.fillStyle = "#521e00";
+        let gradient = ctx.createLinearGradient(0, 0, 6, 10);
+        gradient.addColorStop(0, "#9acc3d")
+        gradient.addColorStop(1, "#86b037");
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = this.grassThickness * 2;
+        ctx.beginPath();
+        ctx.moveTo(-panX + ctx.canvas.width/2, this.height);
+        for (let i = 0; i < this.vectors.length - 2; i++) {
+            ctx.lineTo(this.vectors[i].x - panX + ctx.canvas.width/2, this.vectors[i].y );
+        }
+        ctx.lineTo(this.distance - panX + ctx.canvas.width/2, this.height);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
     }
 
 }
