@@ -12,6 +12,7 @@ class Car {
         this.speedY = 0;
         this.gravity = 0.2;
         this.gravitySpeed = 0;
+        this.startingPosX = x;
         this.x = x;
         this.y = y;
         this.rotation = 0;
@@ -86,20 +87,19 @@ class Car {
     hitBottom(groundY) {
         groundY *= 30
             console.log("groundY: " + groundY);
-            if (this.y > groundY) {
-                this.y = groundY;
+            if ((this.y + this.height + 150) > groundY) {
+                this.y = groundY - this.height;
             }
     }
 
-    draw() {
-        let p1 = 
-        this.context.save();
-        this.canvas.getContext("2d").translate(this.x, this.y);
+    draw(panX) {
+        this.canvas.getContext("2d").save();
+        this.canvas.getContext("2d").translate(this.x * 30 - panX, 0);
         this.wheelFront.draw();
         this.wheelBack.draw();
         this.body.draw();
-        this.context.restore();
-        return true;
+        this.canvas.getContext("2d").restore();
+        return this.x - this.startingPosX;
     }
 }
 
