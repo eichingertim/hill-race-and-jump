@@ -21,22 +21,26 @@ function loadImages(files, onAllLoaded) {
 
 
 const images = loadImages(imageFiles, setup);
+let panX = 0;
 
+let t = 0;
 function updateGameArea() {
+    t += 1;
     canvas.getContext("2d").clearRect(0,0, 1080, 720);
-    car.update(ground.height);
-    car.draw();
-    ground.draw();
+    ground.draw(panX);
+    // let pos = car.x - (car.x % 10);
+    // car.update(ground.vectors[pos].y);
+    // console.log(car.x);
+    // car.draw(panX)
 }
 
 function setup() {
     canvas = document.querySelector("#canvas");
 
     ground = new Ground(canvas);
-    ground.draw();
 
     car = new Car(70, 100, canvas, images.body, images.wheel);
 
-    setInterval(updateGameArea, 20);
+    requestAnimationFrame(updateGameArea);
 }
 

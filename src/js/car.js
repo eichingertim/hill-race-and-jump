@@ -14,6 +14,7 @@ class Car {
         this.gravitySpeed = 0;
         this.x = x;
         this.y = y;
+        this.rotation = 0;
         this.body = new Body(x, y, canvas, imgBody);
         this.wheelFront = new Wheel(x + 136, y + 85, canvas, imgWheel);
         this.wheelBack = new Wheel( x + 13, y + 85, canvas, imgWheel);
@@ -21,7 +22,7 @@ class Car {
         instance = this;
 
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowRight') {   
+            if (event.key === 'ArrowRight') {  
                 instance.isKeyDown = true;
                 if (instance.speedX + 0.5 > MAX_SPEED_X) {
                     instance.speedX = MAX_SPEED_X;
@@ -72,6 +73,10 @@ class Car {
         this.body.update(this.x, this.y);
         this.wheelFront.update(this.x + 136, this.y + 85);
         this.wheelBack.update(this.x + 13, this.y + 85);
+
+        if (this.isKeyDown) {
+            return true;
+        }
     }
 
     get height() {
@@ -79,16 +84,22 @@ class Car {
     }
 
     hitBottom(groundY) {
-        var rockbottom = this.canvas.height - groundY - this.height;
-            if (this.y > rockbottom) {
-                this.y = rockbottom;
+        groundY *= 30
+            console.log("groundY: " + groundY);
+            if (this.y > groundY) {
+                this.y = groundY;
             }
     }
 
     draw() {
+        let p1 = 
+        this.context.save();
+        this.canvas.getContext("2d").translate(this.x, this.y);
         this.wheelFront.draw();
         this.wheelBack.draw();
         this.body.draw();
+        this.context.restore();
+        return true;
     }
 }
 
