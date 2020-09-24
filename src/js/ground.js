@@ -1,15 +1,16 @@
-import Vec2D from "./Vec2D.js";
-import Noise from "./Noise.js";
-import Map from"./Map.js"
-
-const SCALE = 30;
+import Vec2D from "./utils/Vec2D.js";
+import Noise from "./utils/Noise.js";
+import Map from"./utils/Map.js"
 
 class Ground {
-    constructor(canvas) {
+    constructor(canvas, imgGrass) {
         this.canvas = canvas;
         this.height = canvas.height;
 
+        this.imgGrass = imgGrass;
+
         this.vectors = [];
+        this.grassPositions = [];
         this.distance = 20 * canvas.width;
         this.grassThickness = 10;
         this.smoothness = 10;
@@ -22,11 +23,21 @@ class Ground {
 
         this.vectors.push(new Vec2D(this.distance, canvas.height + this.grassThickness * 2));
         this.vectors.push(new Vec2D(0, canvas.height + this.grassThickness * 2));
-        console.log(this.vectors);
-        for (let vect of this.vectors) {
-            //vect.x /= SCALE;
-            //vect.y /= SCALE;
+
+        let randomPos = Math.floor(Math.random() * 60 + 20);
+        let grassIndex = 0;
+        for (let i = 0; i < this.vectors.length - 2; i++) {
+            if (grassIndex === randomPos) {
+                let xPos = this.vectors[i].x;
+                let yPos = this.vectors[i].y;
+                this.grassPositions.push(new Vec2D(xPos, yPos));
+                grassIndex = 0;
+                randomPos = Math.floor(Math.random() * 90 + 50);
+            } else {
+                grassIndex++;
+            }
         }
+
     }
 
     getY(x) {
@@ -54,9 +65,18 @@ class Ground {
             ctx.lineTo(this.vectors[i].x - panX + ctx.canvas.width/2, this.vectors[i].y );
         }
         ctx.lineTo(this.distance - panX + ctx.canvas.width/2, this.height);
-        ctx.closePath();
         ctx.fill();
         ctx.stroke();
+
+        this.drawGrass(ctx, panX);
+    }
+
+    drawGrass(ctx, panX) {
+        for (let i = 0; i < this.grassPositions.length; i++) {
+            let x = this.grassPositions[i].x - panX - this.grassThickness*3 + ctx.canvas.width/2;
+            let y = this.grassPositions[i].y - this.grassThickness*3;
+            ctx.drawImage(this.imgGrass, x, y);
+        }
     }
 
 }

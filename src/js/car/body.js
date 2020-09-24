@@ -1,6 +1,6 @@
-import BaseImageElement from "./baseImageElement.js";
+import Base from "./base.js";
 
-class Body extends BaseImageElement{
+class Body extends Base {
     constructor(x, y, canvas, imgBody) {
         super(x, y, canvas, imgBody);
         this.angle = 0;

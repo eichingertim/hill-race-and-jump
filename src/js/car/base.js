@@ -1,4 +1,4 @@
-class BaseImageElement {
+class Base {
     constructor(x, y, canvas, image, width, height) {
         this.x = x;
         this.y = y;
@@ -10,4 +10,4 @@ class BaseImageElement {
 
 }
 
-export default BaseImageElement;
+export default Base;
