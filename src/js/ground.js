@@ -28,6 +28,19 @@ class Ground {
             //vect.y /= SCALE;
         }
     }
+
+    getY(x) {
+        let betweenSteps = x % this.smoothness,
+            current = (x - betweenSteps) / this.smoothness,
+            next = current + 1,
+            interpolation = 0;
+
+        if(betweenSteps !== 0) {
+            interpolation = (betweenSteps / this.smoothness) * (this.vectors[next].y - this.vectors[current].y);
+        }
+        return this.vectors[current].y + interpolation;
+    }
+
     draw(ctx, panX) {
         ctx.fillStyle = "#521e00";
         let gradient = ctx.createLinearGradient(0, 0, 6, 10);
@@ -36,11 +49,11 @@ class Ground {
         ctx.strokeStyle = gradient;
         ctx.lineWidth = this.grassThickness * 2;
         ctx.beginPath();
-        ctx.moveTo(-panX, this.height);
+        ctx.moveTo(-panX + ctx.canvas.width/2, this.height);
         for (let i = 0; i < this.vectors.length - 2; i++) {
-            ctx.lineTo(this.vectors[i].x - panX , this.vectors[i].y );
+            ctx.lineTo(this.vectors[i].x - panX + ctx.canvas.width/2, this.vectors[i].y );
         }
-        ctx.lineTo(this.distance - panX, this.height);
+        ctx.lineTo(this.distance - panX + ctx.canvas.width/2, this.height);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();

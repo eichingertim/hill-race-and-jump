@@ -13,8 +13,8 @@ class Car {
         this.y = y;
         this.rotation = 0;
         this.body = new Body(x, y, canvas, imgBody);
-        this.wheelFront = new Wheel(x + 136, y + 85, canvas, imgWheel);
-        this.wheelBack = new Wheel( x + 13, y + 85, canvas, imgWheel);
+        this.wheelFront = new Wheel(x + 125, y, canvas, imgWheel, 50, 50);
+        this.wheelBack = new Wheel( x, y, canvas, imgWheel, 50, 50);
         this.accelerate = false;
         this.decelerate = false;
         document.addEventListener('keydown', event => {
@@ -46,33 +46,36 @@ class Car {
         });
     }
 
-    update(groundY) {
-        //sconsole.log(groundY);
+    update(ground) {
+        //console.log(groundY);
         this.speedX += this.accelerate * Car.ACCELERATION_RATE + this.decelerate * -Car.ACCELERATION_RATE;
         this.speedX = Car.clamp(this.speedX, -Car.MAX_SPEED_X, Car.MAX_SPEED_X);
-       //this.gravitySpeed += this.gravity;
+
         this.x += this.speedX;
         this.x = Car.clamp(this.x, 0, 20 * this.canvas.width);
-        //this.y += this.speedY + this.gravitySpeed;
-        //this.hitBottom(groundY);
-        this.y = groundY;
-        //this.body.update(this.x, this.y);
-        //this.wheelFront.update(this.x + 136, this.y + 85);
+
+        this.y = ground.getY(this.x) - 20;
+
+        
+
+        let frontWheelY = ground.getY(this.x + 125) - 20;
+
+        let angle = Math.tan((frontWheelY - this.y) / 125);
+        
+        this.body.update(this.y, angle);
+        this.wheelFront.update(this.x, frontWheelY);
         this.wheelBack.update(this.x, this.y);
 
-        if (this.isKeyDown) {
-            return true;
-        }
     }
 
     get height() {
         return (this.wheelBack.y + this.wheelBack.height) - this.body.y - 30;
     }
 
-    draw(ctx, panX) {
-        //this.wheelFront.draw();
+    draw(ctx) {
+        this.wheelFront.draw(ctx);
         this.wheelBack.draw(ctx);
-        //this.body.draw();
+        this.body.draw(ctx);
         return this.x;
     }
 

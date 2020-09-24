@@ -7,6 +7,8 @@ let canvas,
     car;
 
 let imageFiles = ["body", "wheel"];
+const images = loadImages(imageFiles, setup);
+let panX = 0;
 
 function loadImages(files, onAllLoaded) {
     let i, numLoading = files.length;
@@ -20,19 +22,11 @@ function loadImages(files, onAllLoaded) {
     return images;
 }
 
-
-const images = loadImages(imageFiles, setup);
-let panX = 0;
 function updateGameArea() {
     ctx.clearRect(0,0, canvas.width, canvas.height);
-    //panX += 2;
+
     ground.draw(ctx, panX);
-    let pos = car.x - (car.x % 10);
-    let next = pos + 1;
-    let interpolation = car.x % 10 ? (10/(car.x % 10)) * (ground.vectors[next].y - ground.vectors[pos].y) : 0;
-    console.log(pos, ground.vectors[pos].y, interpolation, ground.vectors[next].y);
-    car.update(ground.vectors[pos].y + interpolation);
-    //console.log(car.x);
+    car.update(ground);
     panX = car.draw(ctx);
     requestAnimationFrame(updateGameArea)
 }
@@ -42,7 +36,7 @@ function setup() {
     ctx = canvas.getContext("2d");
     ground = new Ground(canvas);
 
-    car = new Car(70, 100, canvas, images.body, images.wheel);
+    car = new Car(canvas.width/2, 100, canvas, images.body, images.wheel);
 
     requestAnimationFrame(updateGameArea);
 }
