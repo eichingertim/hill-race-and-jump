@@ -6,17 +6,12 @@ class Body extends BaseImageElement{
         this.angle = 0;
     }
 
-    update(y, angle) {
+    update(y) {
         this.y = y;
-        this.angle = angle;
     }
 
     draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
         ctx.drawImage(this.image, -45, -this.image.height + 10, this.image.width, this.image.height);
-        ctx.restore();
     }
 }
 

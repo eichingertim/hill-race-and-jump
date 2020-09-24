@@ -13,10 +13,11 @@ class Car {
         this.y = y;
         this.rotation = 0;
         this.body = new Body(x, y, canvas, imgBody);
-        this.wheelFront = new Wheel(x + 125, y, canvas, imgWheel, 50, 50);
-        this.wheelBack = new Wheel( x, y, canvas, imgWheel, 50, 50);
+        this.wheelFront = new Wheel(125, y - 100, canvas, imgWheel, 50, 50);
+        this.wheelBack = new Wheel( 0, y - 100, canvas, imgWheel, 50, 50);
         this.accelerate = false;
         this.decelerate = false;
+        this.angle = 0;
         document.addEventListener('keydown', event => {
             if(event.repeat) {
                 return;
@@ -27,6 +28,9 @@ class Car {
                     break;
                 case 'ArrowLeft':
                     this.decelerate = true;
+                    break;
+                case ' ':
+                    this.speedX = 0;
                     break;
             }
         });
@@ -56,16 +60,11 @@ class Car {
 
         this.y = ground.getY(this.x) - 20;
 
-        
+        let length = 125;
 
         let frontWheelY = ground.getY(this.x + 125) - 20;
 
-        let angle = Math.tan((frontWheelY - this.y) / 125);
-        
-        this.body.update(this.y, angle);
-        this.wheelFront.update(this.x, frontWheelY);
-        this.wheelBack.update(this.x, this.y);
-
+        this.angle = Math.atan((frontWheelY - this.y) / length);
     }
 
     get height() {
@@ -73,9 +72,13 @@ class Car {
     }
 
     draw(ctx) {
+        ctx.save();
+        ctx.translate(ctx.canvas.width/2, this.y);
+        ctx.rotate(this.angle);
         this.wheelFront.draw(ctx);
         this.wheelBack.draw(ctx);
         this.body.draw(ctx);
+        ctx.restore();
         return this.x;
     }
 
