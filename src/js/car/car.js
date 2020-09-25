@@ -60,13 +60,16 @@ class Car {
         else {
             this.y += 10
         }
-        
 
         let length = 125;
 
         let frontWheelY = ground.getY(this.x + 125) - 30;
 
         this.angle = Math.atan((frontWheelY - this.y) / length);
+    
+        if (this.x + this.body.width >= ground.distance) {
+            return false;
+        } else return true;
     }
 
     draw(ctx) {

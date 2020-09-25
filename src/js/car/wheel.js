@@ -19,8 +19,7 @@ class Wheel extends Base {
             y = this.y - this.height/2 + this.offsetY;
         ctx.save();
         if (!isFront) {
-            ctx.rotate(this.rotation)
-            console.log("Back: " + x + ", " + y);
+            ctx.rotate(this.rotation);
             ctx.drawImage(this.image, x, y, this.width, this.height);
         }else {
             ctx.translate(x + this.width / 2, y + this.width / 2)

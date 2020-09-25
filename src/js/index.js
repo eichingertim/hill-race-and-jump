@@ -33,7 +33,9 @@ function updateGameArea() {
     ctx.fillRect(0,0, canvas.width, canvas.height);
 
     ground.draw(ctx, panX);
-    car.update(ground);
+    if (!car.update(ground)) {
+        window.location.reload();
+    }
     panX = car.draw(ctx);
 
     requestAnimationFrame(updateGameArea)
