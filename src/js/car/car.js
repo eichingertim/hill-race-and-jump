@@ -9,14 +9,19 @@ class Car {
         this.speedY = 0;
         this.x = x;
         this.y = y;
-        this.rotation = 0;
+        this.accelerate = false;
+        this.decelerate = false;
+        this.angle = 0;
+
         this.player = new Player(x, y, canvas, imgPlayer);
         this.body = new Body(x, y, canvas, imgBody);
         this.wheelFront = new Wheel(125, y - 100, canvas, imgWheel, 50, 50);
         this.wheelBack = new Wheel( 0, y - 100, canvas, imgWheel, 50, 50);
-        this.accelerate = false;
-        this.decelerate = false;
-        this.angle = 0;
+
+        this.setupKeyListener();
+    }
+
+    setupKeyListener() {
         document.addEventListener('keydown', event => {
             if(event.repeat) {
                 return;
