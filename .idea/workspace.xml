@@ -19,13 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f9ec182-c026-4ff8-b4d3-85296499d7ba" name="Default Changelist" comment="added car and basic auto forward movement">
+    <list default="true" id="0f9ec182-c026-4ff8-b4d3-85296499d7ba" name="Default Changelist" comment="refactored some code">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/projekt-ws20-21-fia-formula-hill.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/projekt-ws20-21-fia-formula-hill.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/js/car/base.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/base.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/js/car/body.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/body.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/js/car/car.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/car.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/js/car/player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/player.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/js/car/wheel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/wheel.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +46,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="vue.rearranger.settings.migration" value="true" />
@@ -89,7 +87,7 @@
       <updated>1600691686325</updated>
       <workItem from="1600691687375" duration="9291000" />
       <workItem from="1600891234471" duration="6653000" />
-      <workItem from="1602778106114" duration="564000" />
+      <workItem from="1602778106114" duration="727000" />
     </task>
     <task id="LOCAL-00001" summary="added car and basic auto forward movement">
       <created>1600701139203</created>
@@ -98,7 +96,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600701139203</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="refactored some code">
+      <created>1602778737374</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1602778737374</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,7 +123,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added car and basic auto forward movement" />
-    <option name="LAST_COMMIT_MESSAGE" value="added car and basic auto forward movement" />
+    <MESSAGE value="refactored some code" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored some code" />
   </component>
   <component name="WindowStateProjectService">
     <state x="449" y="212" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1600692187640">
@@ -185,10 +191,10 @@
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="322" y="196" key="MultipleFileMergeDialog/0.0.1368.872@0.0.1368.872" timestamp="1602778292158" />
-    <state x="199" y="218" width="800" height="540" key="Vcs.Push.Dialog.v2" timestamp="1602778279283">
+    <state x="199" y="218" width="800" height="540" key="Vcs.Push.Dialog.v2" timestamp="1602778747957">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="199" y="218" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1602778279283" />
+    <state x="199" y="218" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1602778747957" />
     <state x="325" y="290" width="800" height="540" key="Vcs.Push.Dialog.v2/54.27.1866.1053@54.27.1866.1053" timestamp="1600701142330" />
     <state x="1237" y="469" width="432" height="182" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600891238417">
       <screen x="54" y="27" width="1866" height="1053" />
