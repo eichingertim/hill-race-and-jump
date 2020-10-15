@@ -1,6 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap');
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 #canvas {
     max-width: 1080px;
     max-height: 720px;
     min-width: 1080px;
     min-height: 720px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    min-height: 20vh;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 7em;
+    font-weight: bold;
+    color: white;
+    -webkit-text-stroke: 4px black;
+    text-shadow: 4px 4px 5px black;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
 }

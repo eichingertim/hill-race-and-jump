@@ -4,12 +4,12 @@ import Car from "./car/car.js";
 let canvas,
     ctx,
     ground,
-    car;
+    car,
+    panX = 0;
 
-let imageFiles = ["body", "wheel", "grass", "player"];
+const imageFiles = ["body", "wheel", "grass", "player"];
 
 const images = loadImages(imageFiles, setup);
-let panX = 0;
 
 function loadImages(files, onAllLoaded) {
     let i, numLoading = files.length;
@@ -26,14 +26,20 @@ function loadImages(files, onAllLoaded) {
 function updateGameArea() {
     ctx.clearRect(0,0, canvas.width, canvas.height);
     
+    //Background Sky
     let grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
     grd.addColorStop(0, "#39cce6");
     grd.addColorStop(1, "white");
     ctx.fillStyle = grd;
     ctx.fillRect(0,0, canvas.width, canvas.height);
 
+    //Ground
     ground.draw(ctx, panX);
-    car.update(ground);
+
+    //Car
+    if (!car.update(ground)) {
+        window.location.reload();
+    }
     panX = car.draw(ctx);
 
     requestAnimationFrame(updateGameArea)
@@ -42,8 +48,8 @@ function updateGameArea() {
 function setup() {
     canvas = document.querySelector("#canvas");
     ctx = canvas.getContext("2d");
+    
     ground = new Ground(canvas, images.grass);
-
     car = new Car(canvas.width/2, 100, canvas, images.body, images.wheel, images.player);
 
     requestAnimationFrame(updateGameArea);

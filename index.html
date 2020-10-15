@@ -3,16 +3,14 @@
         <link rel="stylesheet" href="src/css/main.css">
     </head>
     <body>
-        <canvas width="1080px" height="720px" id="canvas"></canvas>
+        <div class="header">
+            <span class="title">FIA Formula Hill</span>
+            <img src="./src/images/finish_flag.png" width="200px" alt="finish-flag" />
+        </div>
+        <div class="canvas-container">
+            <canvas style="border-radius: 30px;" width="1080px" height="720px" id="canvas"></canvas>
+        </div>
     </body>
 
-    <script type="module" src="src/js/Map.js"></script>
-    <script type="module" src="src/js/Noise.js"></script>
-    <script type="module" src="src/js/Vec2D.js"></script>
-    <script type="module" src="src/js/baseImageElement.js"></script>
-    <script type="module" src="src/js/wheel.js"></script>
-    <script type="module" src="src/js/body.js"></script>
-    <script type="module" src="src/js/car.js"></script>
-    <script type="module" src="src/js/ground.js"></script>
     <script type="module" src="src/js/index.js"></script>
 </html>
