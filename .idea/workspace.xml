@@ -20,12 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f9ec182-c026-4ff8-b4d3-85296499d7ba" name="Default Changelist" comment="added car and basic auto forward movement">
-      <change afterPath="$PROJECT_DIR$/src/js/Map.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/js/Noise.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/js/Vec2D.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/js/ground.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/ground.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/car/base.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/base.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/car/body.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/body.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/car/car.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/car.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/car/player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/player.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/car/wheel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/car/wheel.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,16 +50,16 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/hillClimbRacing" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/images" />
       <recent name="$PROJECT_DIR$/src/js" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/images" />
     </key>
   </component>
   <component name="RunManager" selected="JavaScript Debug.index.html">
@@ -89,6 +89,7 @@
       <updated>1600691686325</updated>
       <workItem from="1600691687375" duration="9291000" />
       <workItem from="1600891234471" duration="6653000" />
+      <workItem from="1602778106114" duration="564000" />
     </task>
     <task id="LOCAL-00001" summary="added car and basic auto forward movement">
       <created>1600701139203</created>
@@ -176,9 +177,18 @@
       <screen x="54" y="27" width="1866" height="1053" />
     </state>
     <state width="1843" height="340" key="GridCell.Tab.2.right/54.27.1866.1053@54.27.1866.1053" timestamp="1600701149024" />
-    <state x="325" y="290" width="800" height="540" key="Vcs.Push.Dialog.v2" timestamp="1600701142330">
-      <screen x="54" y="27" width="1866" height="1053" />
+    <state x="130" y="69" key="MergeDialog" timestamp="1602778267058">
+      <screen x="0" y="0" width="1368" height="872" />
     </state>
+    <state x="130" y="69" key="MergeDialog/0.0.1368.872@0.0.1368.872" timestamp="1602778267058" />
+    <state x="322" y="196" key="MultipleFileMergeDialog" timestamp="1602778292158">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="322" y="196" key="MultipleFileMergeDialog/0.0.1368.872@0.0.1368.872" timestamp="1602778292158" />
+    <state x="199" y="218" width="800" height="540" key="Vcs.Push.Dialog.v2" timestamp="1602778279283">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="199" y="218" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1602778279283" />
     <state x="325" y="290" width="800" height="540" key="Vcs.Push.Dialog.v2/54.27.1866.1053@54.27.1866.1053" timestamp="1600701142330" />
     <state x="1237" y="469" width="432" height="182" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600891238417">
       <screen x="54" y="27" width="1866" height="1053" />

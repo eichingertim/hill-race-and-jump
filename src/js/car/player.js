@@ -1,8 +1,8 @@
 import Base from "./base.js";
 
 class Player extends Base {
-    constructor(x, y, canvas, imgPlayer) {
-        super(x, y, canvas, imgPlayer);
+    constructor(x, y, imgPlayer) {
+        super(x, y, imgPlayer);
     }
 
     update(y) {

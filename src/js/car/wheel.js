@@ -1,8 +1,8 @@
 import Base from "./base.js";
 
 class Wheel extends Base {
-    constructor(x, y, canvas, imgWheel, width, height) {
-        super(x, y, canvas, imgWheel, width, height);
+    constructor(x, y, imgWheel, width, height) {
+        super(x, y, imgWheel, width, height);
         this.offsetX = 0;
         this.offsetY = 0;
         this.rotation = 4;

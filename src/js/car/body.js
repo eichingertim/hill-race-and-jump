@@ -1,8 +1,8 @@
 import Base from "./base.js";
 
 class Body extends Base {
-    constructor(x, y, canvas, imgBody) {
-        super(x, y, canvas, imgBody);
+    constructor(x, y, imgBody) {
+        super(x, y, imgBody);
         this.angle = 0;
     }
 
