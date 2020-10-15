@@ -17,6 +17,7 @@ class Car {
         this.accelerate = false;
         this.decelerate = false;
         this.angle = 0;
+        this.firstStart = false;
         document.addEventListener('keydown', event => {
             if(event.repeat) {
                 return;
@@ -24,12 +25,14 @@ class Car {
             switch(event.key) {
                 case 'ArrowRight':
                     this.accelerate = true;
+                    this.firstStart = true;
                     break;
                 case 'ArrowLeft':
                     this.decelerate = true;
+                    this.firstStart = true;
                     break;
                 case ' ':
-                    this.speedX = 0;
+                    console.log("Jump");
                     break;
             }
         });
@@ -50,16 +53,18 @@ class Car {
     }
 
     update(ground) {
-        this.speedX += this.accelerate * Car.ACCELERATION_RATE + this.decelerate * -Car.ACCELERATION_RATE;
-        this.speedX = Car.clamp(this.speedX, -Car.MAX_SPEED_X, Car.MAX_SPEED_X);
+        let newtonPyhsic = (Car.GRAVITY * Math.sin(this.angle)) / Car.CLEAN_NEWTON,
+            acceleration = this.accelerate * Car.ACCELERATION_RATE + this.decelerate * -Car.ACCELERATION_RATE;
+        this.speedX += (acceleration + this.firstStart*newtonPyhsic);
+
+        if (acceleration !== 0) this.speedX = Car.clamp(this.speedX, -Car.MAX_SPEED_X, Car.MAX_SPEED_X);
+        else this.speedX = Car.clamp(Car.brake(this.speedX, newtonPyhsic), -Car.MAX_SPEED_X, Car.MAX_SPEED_X);
 
         this.x += this.speedX;
         this.x = Car.clamp(this.x, 0, 20 * this.canvas.width);
 
-        if (this.y + 10 >= ground.getY(this.x) - 30) this.y = ground.getY(this.x) - 30;
-        else {
-            this.y += 10
-        }
+        if (this.y + Car.GRAVITY >= ground.getY(this.x) - 30) this.y = ground.getY(this.x) - 30;
+        else this.y += Car.GRAVITY;
         
 
         let length = 125;
@@ -75,8 +80,8 @@ class Car {
         ctx.rotate(this.angle);
 
         this.player.draw(ctx);
-        this.wheelFront.draw(ctx, true);
-        this.wheelBack.draw(ctx, false);
+        this.wheelFront.draw(ctx, true, (this.speedX !== 0));
+        this.wheelBack.draw(ctx, false, (this.speedX !== 0));
         this.body.draw(ctx);
         ctx.restore();
         return this.x;
@@ -86,12 +91,30 @@ class Car {
         return Math.min(Math.max(value, min), max);
     }
 
+    static brake(speed, newtonPyhsic) {
+        if (speed - Car.ACCELERATION_RATE + newtonPyhsic > 0) {
+            return speed - Car.ACCELERATION_RATE + newtonPyhsic;
+        } else if (speed + Car.ACCELERATION_RATE + newtonPyhsic < 0) {
+            return speed + Car.ACCELERATION_RATE + newtonPyhsic;
+        } else {
+            return 0;
+        }
+    }
+
+    static get CLEAN_NEWTON() {
+        return 8;
+    }
+
+    static get GRAVITY() {
+        return 9.81;
+    }
+
     static get MAX_SPEED_X() {
-        return 4;
+        return 8;
     }
 
     static get ACCELERATION_RATE() {
-        return 0.2;
+        return 0.5;
     }
 }
 

@@ -6,6 +6,7 @@ class Wheel extends Base {
         this.offsetX = 0;
         this.offsetY = 0;
         this.rotation = 4;
+        this.shouldRotate = false;
     }
 
     update(x, y, offsetX, offsetY) {
@@ -14,17 +15,18 @@ class Wheel extends Base {
         this.offsetY = offsetY || 0;
     }
 
-    draw(ctx, isFront) {
+    draw(ctx, isFront, shouldRotate) {
         let x = this.x - this.width/2 + this.offsetX,
             y = this.y - this.height/2 + this.offsetY;
+        this.shouldRotate = shouldRotate || false;
+        
         ctx.save();
         if (!isFront) {
-            ctx.rotate(this.rotation)
-            console.log("Back: " + x + ", " + y);
+            if (this.shouldRotate) ctx.rotate(this.rotation);
             ctx.drawImage(this.image, x, y, this.width, this.height);
         }else {
             ctx.translate(x + this.width / 2, y + this.width / 2)
-            ctx.rotate(this.rotation)
+            if (this.shouldRotate) ctx.rotate(this.rotation);
             ctx.drawImage(this.image, -this.width/2, -this.width/2, this.width, this.height);
         }
         ctx.restore();
