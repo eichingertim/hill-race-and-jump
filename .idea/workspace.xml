@@ -19,9 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f9ec182-c026-4ff8-b4d3-85296499d7ba" name="Default Changelist" comment="refactored some code">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/projekt-ws20-21-fia-formula-hill.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/projekt-ws20-21-fia-formula-hill.iml" afterDir="false" />
+    <list default="true" id="0f9ec182-c026-4ff8-b4d3-85296499d7ba" name="Default Changelist" comment="added .idea to gitignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +46,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sketchimp" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -87,7 +85,8 @@
       <updated>1600691686325</updated>
       <workItem from="1600691687375" duration="9291000" />
       <workItem from="1600891234471" duration="6653000" />
-      <workItem from="1602778106114" duration="727000" />
+      <workItem from="1602778106114" duration="847000" />
+      <workItem from="1602858085454" duration="17000" />
     </task>
     <task id="LOCAL-00001" summary="added car and basic auto forward movement">
       <created>1600701139203</created>
@@ -103,7 +102,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602778737374</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added .idea to gitignore">
+      <created>1602778868881</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1602778868881</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,16 +130,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added car and basic auto forward movement" />
     <MESSAGE value="refactored some code" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactored some code" />
+    <MESSAGE value="added .idea to gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="added .idea to gitignore" />
   </component>
   <component name="WindowStateProjectService">
     <state x="449" y="212" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1600692187640">
       <screen x="54" y="27" width="1866" height="1053" />
     </state>
     <state x="449" y="212" key="#com.intellij.execution.impl.EditConfigurationsDialog/54.27.1866.1053@54.27.1866.1053" timestamp="1600692187640" />
-    <state x="773" y="297" width="424" height="496" key="FileChooserDialogImpl" timestamp="1600899033776">
-      <screen x="54" y="27" width="1866" height="1053" />
+    <state x="527" y="224" width="320" height="411" key="FileChooserDialogImpl" timestamp="1602858104957">
+      <screen x="0" y="0" width="1368" height="872" />
     </state>
+    <state x="527" y="224" width="320" height="411" key="FileChooserDialogImpl/0.0.1368.872@0.0.1368.872" timestamp="1602858104957" />
     <state x="773" y="297" width="424" height="496" key="FileChooserDialogImpl/54.27.1866.1053@54.27.1866.1053" timestamp="1600899033776" />
     <state width="1843" height="340" key="GridCell.Tab.0.bottom" timestamp="1600701149022">
       <screen x="54" y="27" width="1866" height="1053" />
@@ -191,10 +199,10 @@
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="322" y="196" key="MultipleFileMergeDialog/0.0.1368.872@0.0.1368.872" timestamp="1602778292158" />
-    <state x="199" y="218" width="800" height="540" key="Vcs.Push.Dialog.v2" timestamp="1602778747957">
+    <state x="199" y="218" width="800" height="540" key="Vcs.Push.Dialog.v2" timestamp="1602778890559">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="199" y="218" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1602778747957" />
+    <state x="199" y="218" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1602778890559" />
     <state x="325" y="290" width="800" height="540" key="Vcs.Push.Dialog.v2/54.27.1866.1053@54.27.1866.1053" timestamp="1600701142330" />
     <state x="1237" y="469" width="432" height="182" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600891238417">
       <screen x="54" y="27" width="1866" height="1053" />

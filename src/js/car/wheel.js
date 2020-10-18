@@ -3,21 +3,16 @@ import Base from "./base.js";
 class Wheel extends Base {
     constructor(x, y, imgWheel, width, height) {
         super(x, y, imgWheel, width, height);
+        this.startY = y;
         this.offsetX = 0;
         this.offsetY = 0;
         this.rotation = 4;
         this.shouldRotate = false;
     }
 
-    update(x, y, offsetX, offsetY) {
-        this.y = y;
-        this.offsetX = offsetX || 0;
-        this.offsetY = offsetY || 0;
-    }
-
     draw(ctx, isFront, shouldRotate) {
         let x = this.x - this.width/2 + this.offsetX,
-            y = this.y - this.height/2 + this.offsetY;
+            y = this.startY - this.height/2 + this.offsetY;
         this.shouldRotate = shouldRotate || false;
         
         ctx.save();

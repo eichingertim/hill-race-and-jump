@@ -17,7 +17,7 @@ function loadImages(files, onAllLoaded) {
     const images = {};
     for (i = 0; i < files.length; i++) {
         const img = images[files[i]] = new Image;
-        img.src = "/src/images/" + files[i] + ".png";
+        img.src = "images/" + files[i] + ".png";
         img.onload = onload;
     }
     return images;
@@ -46,6 +46,7 @@ function updateGameArea() {
 }
 
 function setup() {
+    console.log("Hello");
     canvas = document.querySelector("#canvas");
     ctx = canvas.getContext("2d");
     

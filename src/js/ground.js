@@ -11,6 +11,7 @@ class Ground {
 
         this.vectors = [];
         this.grassPositions = [];
+        this.holesPositions = [];
         this.distance = 20 * canvas.width;
         this.grassThickness = 10;
         this.smoothness = 10;
@@ -38,6 +39,40 @@ class Ground {
             }
         }
 
+        let rnd = Math.floor(Math.random() * 200 + 30);
+        let rndWidth = Math.floor(Math.random() * 350 + 150);
+        let holeIndex = 0;
+        for (let i = 0; i < this.vectors.length - 2; i++) {
+            if (holeIndex === rnd) {
+                let xPos = this.vectors[i].x;
+                this.holesPositions.push(new Vec2D(xPos, rndWidth));
+                holeIndex = 0;
+                rnd = Math.floor(Math.random() * 200 + 30);
+                rndWidth = Math.floor(Math.random() * 350 + 150);
+            } else {
+                holeIndex++;
+            }
+        }
+
+    }
+
+    holeDetectionFull(data) {
+        for (let i = 0; i < this.holesPositions.length; i++) {
+            let holeLeft = this.holesPositions[i].x, 
+                holeRight = this.holesPositions[i].x + this.holesPositions[i].y;
+            if (holeLeft < data.right && holeRight > data.right && 
+                holeLeft < data.left && holeRight > data.left) return true;
+        }
+        return false;
+    }
+
+    holeDetectionFront(data) {
+        for (let i = 0; i < this.holesPositions.length; i++) {
+            let holeLeft = this.holesPositions[i].x, 
+                holeRight = this.holesPositions[i].x + this.holesPositions[i].y;
+            if (holeLeft < data.right && holeRight > data.right ) return true;
+        }
+        return false;
     }
 
     getY(x) {
@@ -69,6 +104,19 @@ class Ground {
         ctx.stroke();
 
         this.drawGrass(ctx, panX);
+        this.drawHoles(ctx, panX);
+    }
+
+    drawHoles(ctx, panX) {
+        let grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        grd.addColorStop(0, "#39cce6");
+        grd.addColorStop(1, "white");
+        ctx.fillStyle = grd;
+
+        for (let i = 0; i < this.holesPositions.length; i++) {
+            let x = this.holesPositions[i].x - panX + ctx.canvas.width/2;
+            ctx.fillRect(x, 0, this.holesPositions[i].y, ctx.canvas.height, grd);
+        }
     }
 
     drawGrass(ctx, panX) {
