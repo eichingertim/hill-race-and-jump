@@ -192,6 +192,7 @@ class Car extends Observable {
     }
 
     setEventListener() {
+        let that = this;
         document.addEventListener('keydown', handleKeyDown.bind(this, that));
         document.addEventListener('keyup', handleKeyUp.bind(this, that));
     }
