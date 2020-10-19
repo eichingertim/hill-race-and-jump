@@ -1,8 +1,9 @@
 import Body from "./body.js";
 import Player from "./player.js";
 import Wheel from "./wheel.js";
+import {Observable, Event} from "../utils/Observable.js";
 
-function updateX(car) {
+function updateX(car, ground) {
     let downHillAcceleration = (Car.GRAVITY * Math.sin(car.angle)) / Car.CLEAN_NEWTON,
             acceleration = car.accelerate * Car.ACCELERATION_RATE + car.decelerate * -Car.ACCELERATION_RATE;
         car.speedX += (acceleration + car.firstStart*downHillAcceleration);
@@ -10,7 +11,9 @@ function updateX(car) {
         if (acceleration !== 0) car.speedX = Car.clamp(car.speedX, -Car.MAX_SPEED_X, Car.MAX_SPEED_X);
         else car.speedX = Car.clamp(Car.brake(car.speedX, downHillAcceleration), -Car.MAX_SPEED_X, Car.MAX_SPEED_X);
 
-        car.x += car.speedX;
+        if (!car.isInHole(ground)) {
+            car.x += car.speedX;
+        }
         car.x = Car.clamp(car.x, 0, 20 * car.canvas.width);
 
         car.rightBorderPos = car.x - 50 + car.body.image.width;
@@ -23,11 +26,12 @@ function updateY(car, ground) {
         left: car.LeftBorderPos,
     }
     if (ground.holeDetectionFull(data)) {
-        if (car.y + Car.GRAVITY >= car.canvas.height) console.log("Death");
-        else car.y += Car.GRAVITY;
+        if (car.y + Car.GRAVITY >= car.canvas.height) {
+            //window.location.reload();
+        } else car.y += Car.GRAVITY;
             
         if (car.wheelFront.y + Car.GRAVITY >= car.canvas.height){
-            console.log("Death");
+            //window.location.reload();
         } else car.wheelFront.y += Car.GRAVITY;
 
     } else if (ground.holeDetectionFront(data)) {
@@ -35,11 +39,13 @@ function updateY(car, ground) {
         else car.y += Car.GRAVITY;
             
         if (car.wheelFront.y + Car.GRAVITY >= car.canvas.height){
-            console.log("Death");
+            //window.location.reload();
         } else car.wheelFront.y += Car.GRAVITY;
 
     } else {
-        if (car.y + Car.GRAVITY >= ground.getY(car.x) - 30) car.y = ground.getY(car.x) - 30;
+        if (car.y + Car.GRAVITY >= ground.getY(car.x) - 30) {
+            car.y = ground.getY(car.x) - 30;
+        }
         else car.y += Car.GRAVITY;
             
         if (car.wheelFront.y + Car.GRAVITY >= ground.getY(car.x + Car.DISTANCE_BETWEEN_AXES) - 30){
@@ -50,12 +56,38 @@ function updateY(car, ground) {
     
 }
 
-class Car {
+class CarDiedEvent extends Event {
+    constructor() {
+        super("CarDied", null);
+    }
+}
+
+class DrivingEvent extends Event {
+    constructor(isDriving) {
+        super("Driving", {isDriving: isDriving});
+    }
+}
+
+class CarJumpEvent extends Event {
+    constructor() {
+        super("CarJump", null);
+    }
+}
+
+class CollectedFuelEvent extends Event {
+    constructor() {
+        super("CollectedFuel", null);
+    }
+}
+
+class Car extends Observable {
     constructor(x, y, canvas, imgBody, imgWheel, imgPlayer) {
+        super();
         this.canvas = canvas;
         this.speedX = 0;
         this.x = x;
         this.y = y;
+        this.isDead = false;
 
         this.rightBorderPos = this.x + imgBody.width;
         this.LeftBorderPos = this.x;
@@ -71,9 +103,21 @@ class Car {
         this.setEventListener();
     }
 
+    isInHole(ground) {
+        if (this.wheelFront.y > ground.getY(this.x + Car.DISTANCE_BETWEEN_AXES) - 30 
+            && this.y > ground.getY(this.x) - 30) {
+                return true;
+        }
+        return false;
+    }
+
     update(ground) {
-        updateX(this);
+        updateX(this, ground);
         updateY(this, ground);
+
+        if ((this.y + this.wheelFront.image.height) > this.canvas.height) {
+            this.die();
+        }
 
         this.angle = Math.atan((this.wheelFront.y - this.y) / Car.DISTANCE_BETWEEN_AXES);
         return true;
@@ -97,14 +141,19 @@ class Car {
             if(event.repeat) {
                 return;
             }
+            if (this.isDead) {
+                return;
+            }
             switch(event.key) {
                 case 'ArrowRight':
                     this.accelerate = true;
                     this.firstStart = true;
+                    this.notifyAll(new DrivingEvent(true));
                     break;
                 case 'ArrowLeft':
                     this.decelerate = true;
                     this.firstStart = true;
+                    this.notifyAll(new DrivingEvent(true));
                     break;
                 case ' ':
                     console.log("Jump");
@@ -117,20 +166,31 @@ class Car {
             if(event.repeat) {
                 return;
             }
+            if (this.isDead) {
+                return;
+            }
             switch(event.key) {
                 case 'ArrowRight':
                     this.accelerate = false;
+                    this.notifyAll(new DrivingEvent(false));
                     break;
                 case 'ArrowLeft':
                     this.decelerate = false;
+                    this.notifyAll(new DrivingEvent(false));
                     break;
             }
         });
     }
 
+    die() {
+        this.isDead = true;
+        this.notifyAll(new CarDiedEvent());
+    }
+
     jump() {
-        this.y -= 300;
-        this.wheelFront.y -= 300;
+        this.notifyAll(new CarJumpEvent());
+        this.y -= 400;
+        this.wheelFront.y -= 400;
     }
 
     static clamp(value, min, max) {
@@ -164,7 +224,7 @@ class Car {
     }
 
     static get ACCELERATION_RATE() {
-        return 0.5;
+        return 0.7;
     }
 }
 

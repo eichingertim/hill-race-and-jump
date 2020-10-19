@@ -1,11 +1,14 @@
 import Ground from "./ground.js"
 import Car from "./car/car.js";
+import Fuel from "./game/Fuel.js"
 
 let canvas,
     ctx,
     ground,
     car,
-    panX = 0;
+    fuel,
+    panX,
+    currentAniimationFrameID;
 
 const imageFiles = ["body", "wheel", "grass", "player"];
 
@@ -37,22 +40,50 @@ function updateGameArea() {
     ground.draw(ctx, panX);
 
     //Car
-    if (!car.update(ground)) {
-        window.location.reload();
-    }
+    car.update(ground)
     panX = car.draw(ctx);
 
-    requestAnimationFrame(updateGameArea)
+    fuel.update();
+    fuel.draw(ctx);
+
+    cancelAnimationFrame(currentAniimationFrameID)
+    currentAniimationFrameID = requestAnimationFrame(updateGameArea);
 }
 
+document.querySelector(".reset-icon").addEventListener("click", () => {
+    document.querySelector(".game-over-screen").classList.add("hidden");
+    setup();
+})
+
 function setup() {
-    console.log("Hello");
+    panX = 0;
     canvas = document.querySelector("#canvas");
     ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0, canvas.width, canvas.height);
     
     ground = new Ground(canvas, images.grass);
     car = new Car(canvas.width/2, 100, canvas, images.body, images.wheel, images.player);
+    fuel = new Fuel();
 
-    requestAnimationFrame(updateGameArea);
+    car.addEventListener("CarDied", () => {
+        document.querySelector(".game-over-screen").classList.remove("hidden");
+        cancelAnimationFrame(currentAniimationFrameID);
+    });
+
+    car.addEventListener("Driving", (event) => {
+        fuel.setDriving(event.data.isDriving);
+    });
+
+    car.addEventListener("CarJump", () => {
+        fuel.decreaseForJump();
+    })
+
+    fuel.addEventListener("EmptyFuel", () => {
+        document.querySelector(".game-over-screen").classList.remove("hidden");
+        fuel.draw(ctx);
+        cancelAnimationFrame(currentAniimationFrameID);
+    })
+
+    currentAniimationFrameID = requestAnimationFrame(updateGameArea);
 }
 

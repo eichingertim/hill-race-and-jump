@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap');
 
+:root {
+    --default-padding: 32px;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -31,8 +35,44 @@ body {
 }
 
 .canvas-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+}
+
+.game-over-screen {
+    display: flex;
+    position: relative;
+    width: 1080px;
+    height: 720px;
+    border-radius: 30px;
+    position: absolute;
+    background-color: rgba(55, 55, 55, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.reset-icon {
+    max-width: 80px;
+    max-height: 80px;
+    cursor: pointer;
+    position: absolute;
+    right: var(--default-padding);
+    top: var(--default-padding);
+    transition: all 0.5s;
+}
+
+.reset-icon:active,
+.reset-icon:focus,
+.reset-icon:hover {
+    transform: rotate(-90deg);
+    transition: all 0.5s;
+}
+
+.hidden {
+    display: none;
 }
