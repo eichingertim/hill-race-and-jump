@@ -39,6 +39,7 @@ class Fuel extends Observable {
     }
 
     decreaseForJump() {
+        console.log("SHEEESH");
         if (this.fuelStand - Fuel.JUMP_CONSUME >= 0) {
             this.fuelStand -= Fuel.JUMP_CONSUME;
         } else {

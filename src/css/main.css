@@ -56,6 +56,20 @@ body {
     margin: 0 auto;
 }
 
+.game-won-screen {
+    display: flex;
+    position: relative;
+    width: 1080px;
+    height: 720px;
+    border-radius: 30px;
+    position: absolute;
+    background-color: rgba(55, 55, 55, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
 .reset-icon {
     max-width: 80px;
     max-height: 80px;

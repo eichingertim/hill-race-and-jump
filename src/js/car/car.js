@@ -3,6 +3,8 @@ import Player from "./player.js";
 import Wheel from "./wheel.js";
 import {Observable, Event} from "../utils/Observable.js";
 
+let hasListeners = false;
+
 function updateX(car, ground) {
     let downHillAcceleration = (Car.GRAVITY * Math.sin(car.angle)) / Car.CLEAN_NEWTON,
             acceleration = car.accelerate * Car.ACCELERATION_RATE + car.decelerate * -Car.ACCELERATION_RATE;
@@ -54,6 +56,51 @@ function updateY(car, ground) {
     }
 
     
+}
+
+function handleKeyDown(car, event) {
+    if(event.repeat) {
+        return;
+    }
+    console.log("Hallo1");
+    if (car.isDead) {
+        return;
+    }
+    switch(event.key) {
+        case 'ArrowRight':
+            car.accelerate = true;
+            car.firstStart = true;
+            car.notifyAll(new DrivingEvent(true));
+            break;
+        case 'ArrowLeft':
+            car.decelerate = true;
+            car.firstStart = true;
+            car.notifyAll(new DrivingEvent(true));
+            break;
+        case ' ':
+            console.log("Jump");
+            car.jump();
+            break;
+    }
+}
+
+function handleKeyUp(car, event) {
+    if(event.repeat) {
+        return;
+    }
+    if (car.isDead) {
+        return;
+    }
+    switch(event.key) {
+        case 'ArrowRight':
+            car.accelerate = false;
+            car.notifyAll(new DrivingEvent(false));
+            break;
+        case 'ArrowLeft':
+            car.decelerate = false;
+            car.notifyAll(new DrivingEvent(false));
+            break;
+    }
 }
 
 class CarDiedEvent extends Event {
@@ -111,13 +158,21 @@ class Car extends Observable {
         return false;
     }
 
-    update(ground) {
+    update(ground, target) {
         updateX(this, ground);
         updateY(this, ground);
 
-        if ((this.y + this.wheelFront.image.height) > this.canvas.height) {
+        if ((this.y + this.wheelFront.image.height/2) > this.canvas.height) {
             this.die();
         }
+
+        let data = {
+            rightBorder: this.x + this.body.image.width - 30,
+        }
+        if (ground.fuelTankDetection(data)) {
+            this.notifyAll(new CollectedFuelEvent());
+        }
+        target.targetDetection(data);
 
         this.angle = Math.atan((this.wheelFront.y - this.y) / Car.DISTANCE_BETWEEN_AXES);
         return true;
@@ -137,54 +192,18 @@ class Car extends Observable {
     }
 
     setEventListener() {
-        document.addEventListener('keydown', event => {
-            if(event.repeat) {
-                return;
-            }
-            if (this.isDead) {
-                return;
-            }
-            switch(event.key) {
-                case 'ArrowRight':
-                    this.accelerate = true;
-                    this.firstStart = true;
-                    this.notifyAll(new DrivingEvent(true));
-                    break;
-                case 'ArrowLeft':
-                    this.decelerate = true;
-                    this.firstStart = true;
-                    this.notifyAll(new DrivingEvent(true));
-                    break;
-                case ' ':
-                    console.log("Jump");
-                    this.jump();
-                    break;
-            }
-        });
-
-        document.addEventListener('keyup', event => {
-            if(event.repeat) {
-                return;
-            }
-            if (this.isDead) {
-                return;
-            }
-            switch(event.key) {
-                case 'ArrowRight':
-                    this.accelerate = false;
-                    this.notifyAll(new DrivingEvent(false));
-                    break;
-                case 'ArrowLeft':
-                    this.decelerate = false;
-                    this.notifyAll(new DrivingEvent(false));
-                    break;
-            }
-        });
+        document.addEventListener('keydown', handleKeyDown.bind(this, that));
+        document.addEventListener('keyup', handleKeyUp.bind(this, that));
     }
 
     die() {
-        this.isDead = true;
         this.notifyAll(new CarDiedEvent());
+    }
+
+    stop() {
+        this.speedX = 0;
+        this.accelerate = false;
+        this.decelerate = false;
     }
 
     jump() {

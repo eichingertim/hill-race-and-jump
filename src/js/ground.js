@@ -3,16 +3,19 @@ import Noise from "./utils/Noise.js";
 import Map from"./utils/Map.js"
 
 class Ground {
-    constructor(canvas, imgGrass) {
+    constructor(canvas, imgGrass, imgFuelTank, courseLength) {
         this.canvas = canvas;
         this.height = canvas.height;
 
         this.imgGrass = imgGrass;
+        this.imgFuelTank = imgFuelTank;
 
         this.vectors = [];
         this.grassPositions = [];
         this.holesPositions = [];
-        this.distance = 20 * canvas.width;
+        this.fuelPositions = [];
+
+        this.distance = courseLength;
         this.grassThickness = 10;
         this.smoothness = 10;
         this.x = 0
@@ -25,6 +28,7 @@ class Ground {
         this.vectors.push(new Vec2D(this.distance, canvas.height + this.grassThickness * 2));
         this.vectors.push(new Vec2D(0, canvas.height + this.grassThickness * 2));
 
+        //Grass
         let randomPos = Math.floor(Math.random() * 60 + 20);
         let grassIndex = 0;
         for (let i = 0; i < this.vectors.length - 2; i++) {
@@ -39,18 +43,34 @@ class Ground {
             }
         }
 
-        let rnd = Math.floor(Math.random() * 200 + 30);
-        let rndWidth = Math.floor(Math.random() * 350 + 150);
+        //Holes
+        let rnd = Math.floor(Math.random() * 300 + 100);
+        let rndWidth = Math.floor(Math.random() * 300 + 200);
         let holeIndex = 0;
         for (let i = 0; i < this.vectors.length - 2; i++) {
             if (holeIndex === rnd) {
                 let xPos = this.vectors[i].x;
                 this.holesPositions.push(new Vec2D(xPos, rndWidth));
                 holeIndex = 0;
-                rnd = Math.floor(Math.random() * 200 + 30);
-                rndWidth = Math.floor(Math.random() * 350 + 150);
+                rnd = Math.floor(Math.random() * 300 + 100);
+                rndWidth = Math.floor(Math.random() * 300 + 200);
             } else {
                 holeIndex++;
+            }
+        }
+
+        //FuelTanks
+        let rndFuel = Math.floor(Math.random() * 200 + 80);
+        let fuelIndex = 0;
+        for (let i = 0; i < this.vectors.length - 2; i++) {
+            if (fuelIndex === rndFuel) {
+                let xPos = this.vectors[i].x;
+                let yPos = this.vectors[i].y;
+                this.fuelPositions.push(new Vec2D(xPos, yPos));
+                fuelIndex = 0;
+                rndFuel = Math.floor(Math.random() * 200 + 80);
+            } else {
+                fuelIndex++;
             }
         }
 
@@ -72,6 +92,19 @@ class Ground {
                 holeRight = this.holesPositions[i].x + this.holesPositions[i].y;
             if (holeLeft < data.right && holeRight > data.right ) return true;
         }
+        return false;
+    }
+
+    fuelTankDetection(data) {
+        for (let i = 0; i < this.fuelPositions.length; i++) {
+            let fuelTank = this.fuelPositions[i];
+            if (data.rightBorder >= fuelTank.x && data.rightBorder <= fuelTank.x + this.imgFuelTank.width) {
+                this.fuelPositions.splice(i, 1);
+                console.log(this.fuelPositions);
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -105,6 +138,7 @@ class Ground {
 
         this.drawGrass(ctx, panX);
         this.drawHoles(ctx, panX);
+        this.drawFuelTanks(ctx, panX);
     }
 
     drawHoles(ctx, panX) {
@@ -124,6 +158,14 @@ class Ground {
             let x = this.grassPositions[i].x - panX - this.grassThickness*3 + ctx.canvas.width/2;
             let y = this.grassPositions[i].y - this.grassThickness*3;
             ctx.drawImage(this.imgGrass, x, y);
+        }
+    }
+
+    drawFuelTanks(ctx, panX) {
+        for (let i = 0; i < this.fuelPositions.length; i++) {
+            let x = this.fuelPositions[i].x - panX + ctx.canvas.width/2;
+            let y = this.fuelPositions[i].y - this.imgFuelTank.height - 30;
+            ctx.drawImage(this.imgFuelTank, x, y);
         }
     }
 
