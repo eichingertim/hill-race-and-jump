@@ -1,4 +1,5 @@
 import {Observable, Event} from "../utils/Observable.js";
+import {Config, LevelAttributes} from "../utils/Config.js";
 
 class FinishEvent extends Event {
     constructor() {
@@ -8,12 +9,16 @@ class FinishEvent extends Event {
 
 class Target extends Observable {
 
-    constructor(imgTarget, courseLength, xPosCheckerdFlag, ground) {
+    constructor(imgTarget, currentLevel, ground) {
         super();
         this.imgTarget = imgTarget;
-        this.courseLength = courseLength;
-        this.xPosCheckerdFlag = xPosCheckerdFlag;
-        this.yPosCheckerdFlag = ground.getY(xPosCheckerdFlag);
+        this.reset(currentLevel, ground);
+    }
+
+    reset(currentLevel, ground) {
+        this.courseLength = LevelAttributes[currentLevel].COURSE_LENGTH;
+        this.xPosCheckerdFlag = LevelAttributes[currentLevel].TARGET_POS;
+        this.yPosCheckerdFlag = ground.getY(this.xPosCheckerdFlag);
     }
 
     targetDetection(data) {

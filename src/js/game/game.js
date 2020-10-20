@@ -1,11 +1,11 @@
 import {Config, LevelAttributes} from "../utils/Config.js";
+import {Observable, Event} from "../utils/Observable.js";
 import Ground from "./ground.js";
 import Car from "../car/car.js";
 import Fuel from "./Fuel.js";
 import Target from "./Target.js";
 
-const audioContext = new AudioContext();
-let currentGame;
+let audioContext, currentGame;
 
 function updateSound(game, isDriving) {
     game.isDriving = isDriving;
@@ -22,22 +22,32 @@ function updateSound(game, isDriving) {
 }
 
 function addListeners(game) {
-    let resetBtns = document.querySelectorAll(".reset-icon");
-    resetBtns.forEach((img) => {
-        img.addEventListener("click", () => {
-            console.log("Reset");
-            document.querySelector(".game-over-screen").classList.add("hidden");
-            document.querySelector(".game-won-screen").classList.add("hidden");
-            game.car.reset();
-            game.ground.reset();
-            game.fuel.reset();
-            game.panX = 0;
-        });
-    })
+    let resetBtn = document.querySelector(".reset-icon"),
+        backToMenu = document.querySelector(".back-icon");
+    resetBtn.addEventListener("click", () => {
+        document.querySelector(".game-over-screen").classList.add("hidden");
+        document.querySelector("canvas").classList.remove("hidden");
+        game.car.reset(game.currentLevel);
+        game.ground.reset(game.currentLevel);
+        game.fuel.reset();
+        game.panX = 0;
+    });
+    backToMenu.addEventListener("click", () => {
+        cancelAnimationFrame(game.currentAniimationFrameID);
+        cancelAnimationFrame(game.currentAniimationFrameID);
+        game.notifyAll(new BackToMenuEvent());
+    });
+
+    
     
     game.car.addEventListener("CarDied", () => {
-        document.querySelector(".game-over-screen").classList.remove("hidden");
         cancelAnimationFrame(game.currentAniimationFrameID);
+        cancelAnimationFrame(game.currentAniimationFrameID);
+        game.isDriving = false;
+        game.soundDrive.pause();
+        game.car,stop();
+        document.querySelector("canvas").classList.add("hidden");
+        document.querySelector(".game-over-screen").classList.remove("hidden");
     });
 
     game.car.addEventListener("Driving", (event) => {
@@ -61,15 +71,22 @@ function addListeners(game) {
 
     game.target.addEventListener("Finish", () => {
         game.car.stop();
-        game.document.querySelector(".game-won-screen").classList.remove("hidden");
+        document.querySelector("canvas").classList.add("hidden");
+        document.querySelector(".game-over-screen").classList.remove("hidden");
         cancelAnimationFrame(game.currentAniimationFrameID);
     });
 }
 
+class BackToMenuEvent extends Event {
+    constructor() {
+        super("BackToMenu", null);
+    }
+}
 
-class Game {
+class Game extends Observable{
 
     constructor(images, currentLevel) {
+        super();
         currentGame = this;
         this.canvas = document.querySelector("#canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -78,9 +95,9 @@ class Game {
         this.currentLevel = currentLevel || "EASY";
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
         this.ground = new Ground(this.canvas, images.grass, images.fuel_tank, this.currentLevel);
-        this.car = new Car(this.canvas.width/2, 100, canvas, images.body, images.wheel, images.player);
+        this.car = new Car(this.canvas.width/2, 100, canvas, images.body, images.wheel, images.player, currentLevel);
         this.fuel = new Fuel();
-        this.target = new Target(images.finish_flag,LevelAttributes[this.currentLevel].COURSE_LENGTH, LevelAttributes[this.currentLevel].TARGET_POS, this.ground);
+        this.target = new Target(images.finish_flag, this.currentLevel, this.ground);
 
         this.shouldPlaySpeedUp = true;
         this.shouldPlayDrive = true;
@@ -88,7 +105,7 @@ class Game {
         this.soundDrive = document.querySelector("#car-driving");
         this.soundSpeedDown = document.querySelector("#car-speed-down");
 
-        
+        audioContext = new AudioContext();
         const track = audioContext.createMediaElementSource(this.soundDrive);
         track.connect(audioContext.destination);
         const track1 = audioContext.createMediaElementSource(this.soundSpeedDown);
@@ -97,6 +114,21 @@ class Game {
         track2.connect(audioContext.destination);
 
         addListeners(this);
+        this.currentAniimationFrameID = requestAnimationFrame(this.updateGameArea);
+    }
+
+    reset(currentLevel) {
+        this.canvas = document.querySelector("#canvas");
+        this.ctx = this.canvas.getContext("2d");
+        this.panX = 0;   
+        this.isDriving = false; 
+        this.currentLevel = currentLevel || "EASY";
+        this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+        this.car.reset(currentLevel);
+        this.ground.reset(currentLevel);
+        this.fuel.reset();
+        this.panX = 0;
+        this.target.reset(currentLevel, this.ground);
         this.currentAniimationFrameID = requestAnimationFrame(this.updateGameArea);
     }
 

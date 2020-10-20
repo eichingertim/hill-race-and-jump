@@ -2,6 +2,7 @@ import Body from "./body.js";
 import Player from "./player.js";
 import Wheel from "./wheel.js";
 import {Observable, Event} from "../utils/Observable.js";
+import {Config, LevelAttributes} from "../utils/Config.js";
 
 function updateX(car, ground) {
     let downHillAcceleration = (Car.GRAVITY * Math.sin(car.angle)) / Car.CLEAN_NEWTON,
@@ -14,7 +15,7 @@ function updateX(car, ground) {
         if (!car.isInHole(ground)) {
             car.x += car.speedX;
         }
-        car.x = Car.clamp(car.x, 0, 20 * car.canvas.width);
+        car.x = Car.clamp(car.x, 0, LevelAttributes[car.currenLevel].COURSE_LENGTH);
 
         car.rightBorderPos = car.x - 50 + car.body.image.width;
         car.LeftBorderPos = car.x - 50;
@@ -27,11 +28,9 @@ function updateY(car, ground) {
     }
     if (ground.holeDetectionFull(data)) {
         if (car.y + Car.GRAVITY >= car.canvas.height) {
-            //window.location.reload();
         } else car.y += Car.GRAVITY;
             
         if (car.wheelFront.y + Car.GRAVITY >= car.canvas.height){
-            //window.location.reload();
         } else car.wheelFront.y += Car.GRAVITY;
 
     } else if (ground.holeDetectionFront(data)) {
@@ -81,12 +80,13 @@ class CollectedFuelEvent extends Event {
 }
 
 class Car extends Observable {
-    constructor(x, y, canvas, imgBody, imgWheel, imgPlayer) {
+    constructor(x, y, canvas, imgBody, imgWheel, imgPlayer, currenLevel) {
         super();
         this.canvas = canvas;
         this.speedX = 0;
         this.x = x;
         this.y = y;
+        this.currenLevel = currenLevel;
         this.isDead = false;
 
         this.rightBorderPos = this.x + imgBody.width;
@@ -115,7 +115,7 @@ class Car extends Observable {
         updateX(this, ground);
         updateY(this, ground);
 
-        if ((this.y + this.wheelFront.image.height/2) > this.canvas.height) {
+        if ((this.y + 30) > this.canvas.height) {
             this.die();
         }
 
@@ -191,11 +191,13 @@ class Car extends Observable {
         });
     }
 
-    reset() {
+    reset(currenLevel) {
         this.speedX = 0;
         this.x = canvas.width/2;
         this.y = 100;
         this.isDead = false;
+
+        this.currenLevel = currenLevel;
 
         this.rightBorderPos = this.x + this.body.image.width;
         this.LeftBorderPos = this.x;
@@ -211,6 +213,7 @@ class Car extends Observable {
     }
 
     die() {
+        this.isDead = true;
         this.notifyAll(new CarDiedEvent());
     }
 

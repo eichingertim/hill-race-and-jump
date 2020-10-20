@@ -1,19 +1,26 @@
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
-        <div class="header">
-            <span class="title">FIA Formula Hill</span>
-            <img src="images/finish_flag.png" width="200px" alt="finish-flag" />
-        </div>
         <div class="canvas-container">
-            <canvas style="border-radius: 30px;" width="1080px" height="720px" id="canvas"></canvas>
-            <div class="game-over-screen hidden">
-                <!--Reset Icon | URL: https://thenounproject.com/term/reset/299645/-->
-                <img class="reset-icon" alt="reset by Roberto Chiaveri from the Noun Project" src="images/ic_reset.svg">
+            <div class="game-menu-screen">
+                <img id="off" class="audio-icon" alt="audio-icon" src="images/volume-off.svg">
+                <h1>Welcome To FIA Formula One</h1>
+                <h2>Choose the difficulty</h2>
+                <input class="btn-difficulty" type="button" value="EASY" />
+                <input class="btn-difficulty" type="button" value="MIDDLE" />
+                <input class="btn-difficulty" type="button" value="HARD" />
             </div>
-            <div class="game-won-screen hidden">
+            <canvas class="hidden" style="border-radius: 30px;" width="1080px" height="720px" id="canvas"></canvas>
+            <div class="game-over-screen hidden">
+                <div class="back-icon-container">
+                    <img class="back-icon" src="images/back-arrow.svg">
+                    <span>Back To Menu</span>
+                </div>
+                <h1>You died!</h1>
+                <h2>Try again or switch the difficultness in the menu</h2>
                 <!--Reset Icon | URL: https://thenounproject.com/term/reset/299645/-->
                 <img class="reset-icon" alt="reset by Roberto Chiaveri from the Noun Project" src="images/ic_reset.svg">
             </div>
@@ -21,6 +28,7 @@
         <audio id="car-speed-up" preload="true" <source src="/raw/car-speed-up.mp3" /></audio>
         <audio id="car-driving" preload="true" <source src="/raw/car-driving.mp3" /></audio>
         <audio id="car-speed-down" preload="true" <source src="/raw/car-speed-down.mp3" /></audio>
+        <audio id="menu-theme" preload="true" <source src="/raw/menu-theme.mp3" /></audio>
     </body>
 
     <script type="module" src="js/index.js"></script>

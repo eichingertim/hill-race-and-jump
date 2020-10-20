@@ -78,10 +78,14 @@ class Ground {
         this.holesPositions = [];
         this.fuelPositions = [];
 
-        this.distance = LevelAttributes[currentLevel].COURSE_LENGTH;
-        this.x = 0
-        this.y = 0;
+        this.reset(currentLevel);
 
+    }
+
+    reset(currentLevel) {
+        this.currentLevel = currentLevel;
+        this.distance = LevelAttributes[currentLevel].COURSE_LENGTH;
+        this.vectors = [];
         for (let i = 0; i < this.distance; i+= Config.EDGES_SMOOTHNESS) {
             this.vectors.push(new Vec2D(i, canvas.height - Map.map(Noise.noise(i / 500), 0, 1, 10, 500)))
         }
@@ -89,16 +93,10 @@ class Ground {
         this.vectors.push(new Vec2D(this.distance, canvas.height + Config.GRASS_THICKNESS * 2));
         this.vectors.push(new Vec2D(0, canvas.height + Config.GRASS_THICKNESS * 2));
 
-        this.reset();
-
-    }
-
-    reset() {
         let random, searchIndex = 0;
         setupGrass(this, random, searchIndex);
         setupHoles(this, random, searchIndex);
         setupFuelTanks(this, random, searchIndex);
-        console.log(this.fuelPositions);
     }
 
     holeDetectionFull(data) {
