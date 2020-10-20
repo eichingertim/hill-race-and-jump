@@ -6,7 +6,7 @@ Leitung: Dr. Friedrich Wünsch, Louis Ritzkowski
 
 # FIA Formula HILL #
 
-> Entwickler: Tim Eichinger | MtrklNr: `2089449` | [Kontakt]("tim1.eichinger@stud.uni-regensburg.de")
+> Entwickler: Tim Eichinger | MtrklNr: `2089449` | [Kontakt]("mailto:tim1.eichinger@stud.uni-regensburg.de")
 
 ### Beschreibung ###
 
