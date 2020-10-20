@@ -144,10 +144,10 @@ class Ground {
     }
 
     draw(ctx, panX) {
-        ctx.fillStyle = "#521e00";
+        ctx.fillStyle = Config.GROUND_COLOR;
         let gradient = ctx.createLinearGradient(0, 0, 6, 10);
-        gradient.addColorStop(0, "#9acc3d")
-        gradient.addColorStop(1, "#86b037");
+        gradient.addColorStop(0, Config.GRASS_GRAD_START)
+        gradient.addColorStop(1, Config.GRASS_GRAD_START);
         ctx.strokeStyle = gradient;
         ctx.lineWidth = Config.GRASS_THICKNESS * 2;
         ctx.beginPath();
@@ -166,8 +166,8 @@ class Ground {
 
     drawHoles(ctx, panX) {
         let grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        grd.addColorStop(0, "#39cce6");
-        grd.addColorStop(1, "white");
+        grd.addColorStop(0, Config.SKY_GRAD_START);
+        grd.addColorStop(1, Config.SKY_GRAD_END);
         ctx.fillStyle = grd;
 
         for (let i = 0; i < this.holesPositions.length; i++) {

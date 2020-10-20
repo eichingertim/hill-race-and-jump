@@ -3,7 +3,7 @@ import {Config, LevelAttributes} from "../utils/Config.js";
 
 class FinishEvent extends Event {
     constructor() {
-        super("Finish", null);
+        super(Config.EVENTS.FINSIH, null);
     }
 }
 

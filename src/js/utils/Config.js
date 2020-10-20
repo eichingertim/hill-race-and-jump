@@ -5,9 +5,24 @@ const Config = {
     GRASS_SPAWN_UNTIL: 90,
     GRASS_THICKNESS: 10,
     EDGES_SMOOTHNESS: 10,
-    CAR: {
-        
+    EVENTS: {
+        CAR_DIED: "CarDied",
+        DRIVE_STATE_CHANGED: "DriveStateChanged",
+        COLLECTED_FUEL: "CollectedFuel",
+        CAR_JUMP: "CarJump",
+        BACK_TO_MENU: "BackToMenu",
+        EMPTY_FUEL: "EmptyFuel",
+        FINSIH: "Finish",
     },
+    GROUND_COLOR: "#521e00",
+    GRASS_GRAD_START: "#9acc3d",
+    GRASS_GRAD_END: "#86b037",
+    SKY_GRAD_START: "#39cce6",
+    SKY_GRAD_END: "white",
+    PATH_IMG_SOUND_ON: "/images/volume-on.svg",
+    PATH_IMG_SOUND_OFF: "/images/volume-off.svg",
+    MSG_DEAD: "You died or ran out of fuel!",
+    MSG_WON: "Congratulations! You won!",
     LEVELS: [
         "EASY",
         "MIDDLE",

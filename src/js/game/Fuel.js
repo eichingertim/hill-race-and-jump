@@ -1,8 +1,9 @@
 import {Observable, Event} from "../utils/Observable.js";
+import Config from "../utils/Config.js";
 
 class EmptyFuelEvent extends Event {
     constructor() {
-        super("EmptyFuel", null);
+        super(Config.EVENTS.EMPTY_FUEL, null);
     }
 }
 
@@ -29,13 +30,15 @@ class Fuel extends Observable {
     }
 
     draw(ctx) {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(50, 50, 300, 50);
-        ctx.fillStyle = "#FDFD00";
+        ctx.fillStyle = Fuel.ATTRIBUTES.OUTER_COLOR;
+        ctx.fillRect(Fuel.ATTRIBUTES.OUTER_X, Fuel.ATTRIBUTES.OUTER_Y, 
+            Fuel.ATTRIBUTES.OUTER_WIDTH, Fuel.ATTRIBUTES.OUTER_HEIGHT);
+        ctx.fillStyle = Fuel.ATTRIBUTES.INNER_COLOR;
 
         let width = (this.fuelStand * Fuel.DEFAULT_FUEL_STAND_WIDTH) / Fuel.DEFAULT_FUEL_STAND;
 
-        ctx.fillRect(55, 55, width, 40);
+        ctx.fillRect(Fuel.ATTRIBUTES.INNER_X, Fuel.ATTRIBUTES.INNER_Y, 
+            width, Fuel.ATTRIBUTES.INNER_HEIGHT);
     }
 
     setDriving(isDriving) {
@@ -43,7 +46,6 @@ class Fuel extends Observable {
     }
 
     decreaseForJump() {
-        console.log("SHEEESH");
         if (this.fuelStand - Fuel.JUMP_CONSUME >= 0) {
             this.fuelStand -= Fuel.JUMP_CONSUME;
         } else {
@@ -54,6 +56,20 @@ class Fuel extends Observable {
 
     collectedFuel() {
         this.fuelStand = Fuel.DEFAULT_FUEL_STAND;
+    }
+
+    static get ATTRIBUTES() { 
+        return {
+            OUTER_X: 50,
+            OUTER_Y: 80,
+            OUTER_WIDTH: 300,
+            OUTER_HEIGHT: 50,
+            OUTER_COLOR: "#000000",
+            INNER_X: 55,
+            INNER_Y: 85,
+            INNER_HEIGHT: 40,
+            INNER_COLOR: "#FDFD00",
+        }
     }
 
     static get DEFAULT_FUEL_STAND_WIDTH() { return 290}

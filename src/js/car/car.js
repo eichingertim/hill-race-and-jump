@@ -48,7 +48,7 @@ function updateY(car, ground) {
         else car.y += Car.GRAVITY;
             
         if (car.wheelFront.y + Car.GRAVITY >= ground.getY(car.x + Car.DISTANCE_BETWEEN_AXES) - 30){
-            car.wheelFront.y = ground.getY(car.x + 125) - 30;
+            car.wheelFront.y = ground.getY(car.x + Car.DISTANCE_BETWEEN_AXES) - 30;
         } else car.wheelFront.y += Car.GRAVITY;
     }
 
@@ -57,25 +57,25 @@ function updateY(car, ground) {
 
 class CarDiedEvent extends Event {
     constructor() {
-        super("CarDied", null);
+        super(Config.EVENTS.CAR_DIED, null);
     }
 }
 
 class DrivingEvent extends Event {
     constructor(isDriving) {
-        super("Driving", {isDriving: isDriving});
+        super(Config.EVENTS.DRIVE_STATE_CHANGED, {isDriving: isDriving});
     }
 }
 
 class CarJumpEvent extends Event {
     constructor() {
-        super("CarJump", null);
+        super(Config.EVENTS.CAR_JUMP, null);
     }
 }
 
 class CollectedFuelEvent extends Event {
     constructor() {
-        super("CollectedFuel", null);
+        super(Config.EVENTS.COLLECTED_FUEL, null);
     }
 }
 
@@ -166,7 +166,6 @@ class Car extends Observable {
                     this.notifyAll(new DrivingEvent(true));
                     break;
                 case ' ':
-                    console.log("Jump");
                     this.jump();
                     break;
             }
@@ -218,6 +217,7 @@ class Car extends Observable {
     }
 
     stop() {
+        this.isDead = true;
         this.isDriving = true;
         this.speedX = 0;
         this.accelerate = false;

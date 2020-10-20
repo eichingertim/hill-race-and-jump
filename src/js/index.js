@@ -1,11 +1,21 @@
 import Game from "./game/game.js"
+import Config from "./utils/Config.js"
 
 let game,
     audioContext;
     
 
 const imageFiles = ["body", "wheel", "grass", "player", "fuel_tank", "finish_flag"],
-    images = loadImages(imageFiles, setup);
+    images = loadImages(imageFiles, setup),
+    views = {
+        btnReset: document.querySelector(".reset-icon"),
+        btnBackToMenu: document.querySelector(".back-icon"),
+        gameOverScreen: document.querySelector(".game-over-screen"),
+        gameMenuScreen: document.querySelector(".game-menu-screen"),
+        canvas: document.querySelector("canvas"),
+        winLooseMsg: document.querySelector("#win-loose-message"),
+        timeMsg: document.querySelector("#time-message"),
+    };
 
 function loadImages(files, onAllLoaded) {
     let i, numLoading = files.length;
@@ -31,11 +41,11 @@ function setupListeners(menuTheme) {
                 menuTheme.loop = true;
             }  
             event.target.id = "on"
-            soundOnOff.src = "images/volume-on.svg"
+            soundOnOff.src = Config.PATH_IMG_SOUND_ON
             menuTheme.play();  
         } else {
             event.target.id = "off"
-            soundOnOff.src = "images/volume-off.svg"
+            soundOnOff.src = Config.PATH_IMG_SOUND_OFF
             menuTheme.pause();
         }
     });
@@ -43,19 +53,19 @@ function setupListeners(menuTheme) {
     const difficultyBtns = document.querySelectorAll(".btn-difficulty");
     difficultyBtns.forEach((btn) => {
         btn.addEventListener("click", (event) => {
-            document.querySelector("canvas").classList.remove("hidden");
-            document.querySelector(".game-menu-screen").classList.add("hidden");
+            views.canvas.classList.remove("hidden");
+            views.gameMenuScreen.classList.add("hidden");
             if (game) {
                 menuTheme.volume = 0.2;
                 game.reset(event.target.value);
             } else {
                 menuTheme.volume = 0.2;
-                game = new Game(images, event.target.value);
-                game.addEventListener("BackToMenu", () => {
+                game = new Game(images, event.target.value, views);
+                game.addEventListener(Config.EVENTS.BACK_TO_MENU, () => {
                     menuTheme.volume = 1;
-                    document.querySelector("canvas").classList.add("hidden");
-                    document.querySelector(".game-over-screen").classList.add("hidden");
-                    document.querySelector(".game-menu-screen").classList.remove("hidden");
+                    views.canvas.classList.add("hidden");
+                    views.gameOverScreen.classList.add("hidden");
+                    views.gameMenuScreen.classList.remove("hidden");
                 });
             }
             
@@ -65,9 +75,7 @@ function setupListeners(menuTheme) {
 
 function setup() {
     const menuTheme = document.querySelector("#menu-theme");
-    setupListeners(menuTheme);
-    
-    
+    setupListeners(menuTheme);    
 }
 
 
