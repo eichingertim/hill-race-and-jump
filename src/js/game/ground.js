@@ -1,7 +1,7 @@
-import Vec2D from "./utils/Vec2D.js";
-import Noise from "./utils/Noise.js";
-import Map from"./utils/Map.js"
-import {Config, LevelAttributes} from"./utils/Config.js";
+import Vec2D from "../utils/Vec2D.js";
+import Noise from "../utils/Noise.js";
+import Map from"../utils/Map.js"
+import {Config, LevelAttributes} from"../utils/Config.js";
 
 function setupGrass(car, random, searchIndex) {
     car.grassPositions = [];
