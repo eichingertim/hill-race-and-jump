@@ -41,6 +41,7 @@ function addListeners(game) {
     
     
     game.car.addEventListener("CarDied", () => {
+        document.querySelector("#win-loose-message").innerHTML = "You died or ran out of fuel!";
         cancelAnimationFrame(game.currentAniimationFrameID);
         cancelAnimationFrame(game.currentAniimationFrameID);
         game.isDriving = false;
@@ -70,6 +71,7 @@ function addListeners(game) {
     });
 
     game.target.addEventListener("Finish", () => {
+        document.querySelector("#win-loose-message").innerHTML = "Congratulations! You won!";
         game.car.stop();
         document.querySelector("canvas").classList.add("hidden");
         document.querySelector(".game-over-screen").classList.remove("hidden");

@@ -218,6 +218,7 @@ class Car extends Observable {
     }
 
     stop() {
+        this.isDriving = true;
         this.speedX = 0;
         this.accelerate = false;
         this.decelerate = false;
