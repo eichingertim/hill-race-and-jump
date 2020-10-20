@@ -2,14 +2,13 @@ import Ground from "./ground.js"
 import Car from "./car/car.js";
 import Fuel from "./game/Fuel.js"
 import Target from "./game/Target.js";
-
-const COURSE_LENGTH = 20*1080,
-    POS_CHECKERED_FLAG = COURSE_LENGTH - 700;
+import {Config, LevelAttributes} from "./utils/Config.js"
 
 let canvas, ctx,
     ground,car,
     fuel,panX, target,
-    currentAniimationFrameID;
+    currentAniimationFrameID, 
+    currentLevel = "MIDDLE";
 
 const imageFiles = ["body", "wheel", "grass", "player", "fuel_tank", "finish_flag"];
 
@@ -60,7 +59,10 @@ function setup() {
             console.log("Reset");
             document.querySelector(".game-over-screen").classList.add("hidden");
             document.querySelector(".game-won-screen").classList.add("hidden");
-            setup();
+            car.reset();
+            ground.reset();
+            fuel.reset();
+            panX = 0;
         });
     })
     panX = 0;
@@ -68,10 +70,11 @@ function setup() {
     ctx = canvas.getContext("2d");
     ctx.clearRect(0,0, canvas.width, canvas.height);
     
-    ground = new Ground(canvas, images.grass, images.fuel_tank, COURSE_LENGTH);
+    ground = new Ground(canvas, images.grass, images.fuel_tank, currentLevel);
     car = new Car(canvas.width/2, 100, canvas, images.body, images.wheel, images.player);
     fuel = new Fuel();
-    target = new Target(images.finish_flag, COURSE_LENGTH, POS_CHECKERED_FLAG, ground);
+    target = new Target(images.finish_flag, 
+        LevelAttributes[currentLevel].COURSE_LENGTH, LevelAttributes[currentLevel].TARGET_POS, ground);
 
     car.addEventListener("CarDied", () => {
         document.querySelector(".game-over-screen").classList.remove("hidden");

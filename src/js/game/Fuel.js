@@ -13,6 +13,10 @@ class Fuel extends Observable {
         this.fuelStand = Fuel.DEFAULT_FUEL_STAND;
     }
 
+    reset() {
+        this.fuelStand = Fuel.DEFAULT_FUEL_STAND;
+    }
+
     update() {
         if (this.isDriving) {
             if (this.fuelStand - Fuel.MEAN_DRIVE_CONSUME >= 0) {

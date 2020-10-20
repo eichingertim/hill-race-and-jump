@@ -5,6 +5,11 @@ class Player extends Base {
         super(x, y, imgPlayer);
     }
 
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
     update(y) {
         this.y = y;
     }

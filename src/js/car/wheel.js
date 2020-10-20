@@ -10,6 +10,11 @@ class Wheel extends Base {
         this.shouldRotate = false;
     }
 
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
     draw(ctx, isFront, shouldRotate) {
         let x = this.x - this.width/2 + this.offsetX,
             y = this.startY - this.height/2 + this.offsetY;

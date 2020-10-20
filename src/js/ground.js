@@ -1,12 +1,75 @@
 import Vec2D from "./utils/Vec2D.js";
 import Noise from "./utils/Noise.js";
 import Map from"./utils/Map.js"
+import {Config, LevelAttributes} from"./utils/Config.js";
+
+function setupGrass(car, random, searchIndex) {
+    car.grassPositions = [];
+    random = getRandom(Config.GRASS_SPAWN_FROM, Config.GRASS_SPAWN_UNTIL);
+    for (let i = 0; i < car.vectors.length - 2; i++) {
+        if (searchIndex === random) {
+            let xPos = car.vectors[i].x;
+            let yPos = car.vectors[i].y;
+            car.grassPositions.push(new Vec2D(xPos, yPos));
+            searchIndex = 0;
+            random = getRandom(Config.GRASS_SPAWN_FROM, Config.GRASS_SPAWN_UNTIL);
+        } else {
+            searchIndex++;
+        }
+    }
+}
+
+function setupHoles(car, random, searchIndex) {
+    car.holesPositions = [];
+    random = getRandom(LevelAttributes[car.currentLevel].RANGE_SPAWN_HOLES_FROM,
+        LevelAttributes[car.currentLevel].RANGE_SPAWN_HOLES_UNTIL);
+    searchIndex = 0;
+    let rndWidth = getRandom(LevelAttributes[car.currentLevel].HOLE_WIDTH_FROM,
+        LevelAttributes[car.currentLevel].HOLE_WIDTH_UNTIL);
+
+    for (let i = 0; i < car.vectors.length - 2; i++) {
+        if (searchIndex === random) {
+            let xPos = car.vectors[i].x;
+            car.holesPositions.push(new Vec2D(xPos, rndWidth));
+            searchIndex = 0;
+            random = getRandom(LevelAttributes[car.currentLevel].RANGE_SPAWN_HOLES_FROM,
+                LevelAttributes[car.currentLevel].RANGE_SPAWN_HOLES_UNTIL);
+            rndWidth = getRandom(LevelAttributes[car.currentLevel].HOLE_WIDTH_FROM,
+                LevelAttributes[car.currentLevel].HOLE_WIDTH_UNTIL);
+        } else {
+            searchIndex++;
+        }
+    }
+}
+
+function setupFuelTanks(car, random, searchIndex) {
+    car.fuelPositions = [];
+    random = getRandom(LevelAttributes[car.currentLevel].RANGE_SPAWN_FUEL_FROM,
+        LevelAttributes[car.currentLevel].RANGE_SPAWN_FUEL_UNTIL);
+    searchIndex = 0;
+    for (let i = 0; i < car.vectors.length - 2; i++) {
+        if (searchIndex === random) {
+            let xPos = car.vectors[i].x;
+            let yPos = car.vectors[i].y;
+            car.fuelPositions.push(new Vec2D(xPos, yPos));
+            searchIndex = 0;
+            random = getRandom(LevelAttributes[car.currentLevel].RANGE_SPAWN_FUEL_FROM,
+                LevelAttributes[car.currentLevel].RANGE_SPAWN_FUEL_UNTIL);
+        } else {
+            searchIndex++;
+        }
+    }
+}
+
+function getRandom(from, until) {
+    return Math.floor(Math.random() * until + from);
+}
 
 class Ground {
-    constructor(canvas, imgGrass, imgFuelTank, courseLength) {
+    constructor(canvas, imgGrass, imgFuelTank, currentLevel) {
         this.canvas = canvas;
         this.height = canvas.height;
-
+        this.currentLevel = currentLevel;
         this.imgGrass = imgGrass;
         this.imgFuelTank = imgFuelTank;
 
@@ -15,65 +78,27 @@ class Ground {
         this.holesPositions = [];
         this.fuelPositions = [];
 
-        this.distance = courseLength;
-        this.grassThickness = 10;
-        this.smoothness = 10;
+        this.distance = LevelAttributes[currentLevel].COURSE_LENGTH;
         this.x = 0
         this.y = 0;
 
-        for (let i = 0; i < this.distance; i+= this.smoothness) {
+        for (let i = 0; i < this.distance; i+= Config.EDGES_SMOOTHNESS) {
             this.vectors.push(new Vec2D(i, canvas.height - Map.map(Noise.noise(i / 500), 0, 1, 10, 500)))
         }
 
-        this.vectors.push(new Vec2D(this.distance, canvas.height + this.grassThickness * 2));
-        this.vectors.push(new Vec2D(0, canvas.height + this.grassThickness * 2));
+        this.vectors.push(new Vec2D(this.distance, canvas.height + Config.GRASS_THICKNESS * 2));
+        this.vectors.push(new Vec2D(0, canvas.height + Config.GRASS_THICKNESS * 2));
 
-        //Grass
-        let randomPos = Math.floor(Math.random() * 60 + 20);
-        let grassIndex = 0;
-        for (let i = 0; i < this.vectors.length - 2; i++) {
-            if (grassIndex === randomPos) {
-                let xPos = this.vectors[i].x;
-                let yPos = this.vectors[i].y;
-                this.grassPositions.push(new Vec2D(xPos, yPos));
-                grassIndex = 0;
-                randomPos = Math.floor(Math.random() * 90 + 50);
-            } else {
-                grassIndex++;
-            }
-        }
+        this.reset();
 
-        //Holes
-        let rnd = Math.floor(Math.random() * 300 + 100);
-        let rndWidth = Math.floor(Math.random() * 300 + 200);
-        let holeIndex = 0;
-        for (let i = 0; i < this.vectors.length - 2; i++) {
-            if (holeIndex === rnd) {
-                let xPos = this.vectors[i].x;
-                this.holesPositions.push(new Vec2D(xPos, rndWidth));
-                holeIndex = 0;
-                rnd = Math.floor(Math.random() * 300 + 100);
-                rndWidth = Math.floor(Math.random() * 300 + 200);
-            } else {
-                holeIndex++;
-            }
-        }
+    }
 
-        //FuelTanks
-        let rndFuel = Math.floor(Math.random() * 200 + 80);
-        let fuelIndex = 0;
-        for (let i = 0; i < this.vectors.length - 2; i++) {
-            if (fuelIndex === rndFuel) {
-                let xPos = this.vectors[i].x;
-                let yPos = this.vectors[i].y;
-                this.fuelPositions.push(new Vec2D(xPos, yPos));
-                fuelIndex = 0;
-                rndFuel = Math.floor(Math.random() * 200 + 80);
-            } else {
-                fuelIndex++;
-            }
-        }
-
+    reset() {
+        let random, searchIndex = 0;
+        setupGrass(this, random, searchIndex);
+        setupHoles(this, random, searchIndex);
+        setupFuelTanks(this, random, searchIndex);
+        console.log(this.fuelPositions);
     }
 
     holeDetectionFull(data) {
@@ -109,13 +134,13 @@ class Ground {
     }
 
     getY(x) {
-        let betweenSteps = x % this.smoothness,
-            current = (x - betweenSteps) / this.smoothness,
+        let betweenSteps = x % Config.EDGES_SMOOTHNESS,
+            current = (x - betweenSteps) / Config.EDGES_SMOOTHNESS,
             next = current + 1,
             interpolation = 0;
 
         if(betweenSteps !== 0) {
-            interpolation = (betweenSteps / this.smoothness) * (this.vectors[next].y - this.vectors[current].y);
+            interpolation = (betweenSteps / Config.EDGES_SMOOTHNESS) * (this.vectors[next].y - this.vectors[current].y);
         }
         return this.vectors[current].y + interpolation;
     }
@@ -126,7 +151,7 @@ class Ground {
         gradient.addColorStop(0, "#9acc3d")
         gradient.addColorStop(1, "#86b037");
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = this.grassThickness * 2;
+        ctx.lineWidth = Config.GRASS_THICKNESS * 2;
         ctx.beginPath();
         ctx.moveTo(-panX + ctx.canvas.width/2, this.height);
         for (let i = 0; i < this.vectors.length - 2; i++) {
@@ -155,8 +180,8 @@ class Ground {
 
     drawGrass(ctx, panX) {
         for (let i = 0; i < this.grassPositions.length; i++) {
-            let x = this.grassPositions[i].x - panX - this.grassThickness*3 + ctx.canvas.width/2;
-            let y = this.grassPositions[i].y - this.grassThickness*3;
+            let x = this.grassPositions[i].x - panX - Config.GRASS_THICKNESS*3 + ctx.canvas.width/2;
+            let y = this.grassPositions[i].y - Config.GRASS_THICKNESS*3;
             ctx.drawImage(this.imgGrass, x, y);
         }
     }

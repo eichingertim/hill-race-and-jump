@@ -3,8 +3,6 @@ import Player from "./player.js";
 import Wheel from "./wheel.js";
 import {Observable, Event} from "../utils/Observable.js";
 
-let hasListeners = false;
-
 function updateX(car, ground) {
     let downHillAcceleration = (Car.GRAVITY * Math.sin(car.angle)) / Car.CLEAN_NEWTON,
             acceleration = car.accelerate * Car.ACCELERATION_RATE + car.decelerate * -Car.ACCELERATION_RATE;
@@ -56,51 +54,6 @@ function updateY(car, ground) {
     }
 
     
-}
-
-function handleKeyDown(car, event) {
-    if(event.repeat) {
-        return;
-    }
-    console.log("Hallo1");
-    if (car.isDead) {
-        return;
-    }
-    switch(event.key) {
-        case 'ArrowRight':
-            car.accelerate = true;
-            car.firstStart = true;
-            car.notifyAll(new DrivingEvent(true));
-            break;
-        case 'ArrowLeft':
-            car.decelerate = true;
-            car.firstStart = true;
-            car.notifyAll(new DrivingEvent(true));
-            break;
-        case ' ':
-            console.log("Jump");
-            car.jump();
-            break;
-    }
-}
-
-function handleKeyUp(car, event) {
-    if(event.repeat) {
-        return;
-    }
-    if (car.isDead) {
-        return;
-    }
-    switch(event.key) {
-        case 'ArrowRight':
-            car.accelerate = false;
-            car.notifyAll(new DrivingEvent(false));
-            break;
-        case 'ArrowLeft':
-            car.decelerate = false;
-            car.notifyAll(new DrivingEvent(false));
-            break;
-    }
 }
 
 class CarDiedEvent extends Event {
@@ -192,9 +145,69 @@ class Car extends Observable {
     }
 
     setEventListener() {
-        let that = this;
-        document.addEventListener('keydown', handleKeyDown.bind(this, that));
-        document.addEventListener('keyup', handleKeyUp.bind(this, that));
+        console.log(this);
+        document.addEventListener('keydown', (event) => {
+            if(event.repeat) {
+                return;
+            }
+            if (this.isDead) {
+                return;
+            }
+            switch(event.key) {
+                case 'ArrowRight':
+                    console.log(this);
+                    this.accelerate = true;
+                    this.firstStart = true;
+                    this.notifyAll(new DrivingEvent(true));
+                    break;
+                case 'ArrowLeft':
+                    this.decelerate = true;
+                    this.firstStart = true;
+                    this.notifyAll(new DrivingEvent(true));
+                    break;
+                case ' ':
+                    console.log("Jump");
+                    this.jump();
+                    break;
+            }
+        });
+        document.addEventListener('keyup', (event) => {
+            if(event.repeat) {
+                return;
+            }
+            if (this.isDead) {
+                return;
+            }
+            switch(event.key) {
+                case 'ArrowRight':
+                    this.accelerate = false;
+                    this.notifyAll(new DrivingEvent(false));
+                    break;
+                case 'ArrowLeft':
+                    this.decelerate = false;
+                    this.notifyAll(new DrivingEvent(false));
+                    break;
+            }
+        });
+    }
+
+    reset() {
+        this.speedX = 0;
+        this.x = canvas.width/2;
+        this.y = 100;
+        this.isDead = false;
+
+        this.rightBorderPos = this.x + this.body.image.width;
+        this.LeftBorderPos = this.x;
+
+        this.player.reset(this.x, this.y);
+        this.body.reset(this.x, this.y);
+        this.wheelFront.reset(Car.DISTANCE_BETWEEN_AXES, this.y - 100);
+        this.wheelBack.reset(0, this.y - 100);
+        this.accelerate = false;
+        this.decelerate = false;
+        this.angle = 0;
+        this.firstStart = false;
     }
 
     die() {

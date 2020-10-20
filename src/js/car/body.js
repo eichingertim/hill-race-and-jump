@@ -6,6 +6,11 @@ class Body extends Base {
         this.angle = 0;
     }
 
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
     update(y) {
         this.y = y;
     }
